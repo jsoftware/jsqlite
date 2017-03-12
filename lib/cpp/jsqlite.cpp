@@ -1,5 +1,12 @@
 /* jsqlite.cpp  */
 
+#ifdef ANDROID
+extern "C" {
+  extern void *__dso_handle __attribute__((__visibility__("hidden")));
+  void *__dso_handle;
+}
+#endif
+
 #include "jsqlite.h"
 #include "column.h"
 
@@ -19,9 +26,9 @@ struct Result {
   void *values;         // column values
   void *types;          // column types
   void *names;          // column names
-  long long nameslen;   // length of column names
-  long long rows;       // rows in result
-  long long cols;       // columns in result
+  I nameslen;           // length of column names
+  I rows;               // rows in result
+  I cols;               // columns in result
 };
 
 // ---------------------------------------------------------------------
@@ -52,9 +59,10 @@ int sqlite3_read_values(sqlite3_stmt *sh, void **res)
 {
   Result *vals = (Result *)malloc(sizeof(Result));
 
-  int i, pos, step, type;
+//  int i, pos, step, type;
+  int i, pos, step;
   const char *name;
-  Column *column;
+//  Column *column;
 
 // init columns
   int numcols=sqlite3_column_count(sh);
@@ -76,7 +84,7 @@ int sqlite3_read_values(sqlite3_stmt *sh, void **res)
   }
 
   char **colbuffer = (char **)malloc(numcols * sizeof(char *));
-  long long *coltypes = (long long *)malloc(numcols * sizeof(long long));
+  I *coltypes = (I *)malloc(numcols * sizeof(I));
   for (i=0; i<numcols; i++) {
     colbuffer[i]=columns[i]->getbuffer();
     coltypes[i]=columns[i]->gettype();
@@ -93,7 +101,7 @@ int sqlite3_read_values(sqlite3_stmt *sh, void **res)
   for (i=0; i<numcols; i++) {
     name=columns[i]->getname();
     strcpy(colnames+pos,name);
-    pos+=1+strlen(name);
+    pos+=1+(int)strlen(name);
   }
   vals->names=(void *)colnames;
   vals->nameslen=pos;

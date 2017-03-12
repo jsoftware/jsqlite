@@ -1,0 +1,47 @@
+!ifdef x64
+CFLAGS= /D _JDLL /DC_NA=0 /EHsc /WX /W3 /O2 /Ot /Ob1 /D _USING_V110_SDK71_ /D _CRT_SECURE_NO_WARNINGS /MT /D NDEBUG /D WIN32 /D _WINDOW -DSQLITE_THREADSAFE=0 -DSQLITE_OMIT_LOAD_EXTENSION -DSQLITE_ENABLE_COLUMN_METADATAS
+FLAGS= /DLL /NOLOGO /MACHINE:X64 /SUBSYSTEM:WINDOWS,5.02
+!else
+CFLAGS= /D _JDLL /EHsc /WX /W3 /O2 /Ot /Ob1 /D _USING_V110_SDK71_ /D _CRT_SECURE_NO_WARNINGS /MT /D NDEBUG /D WIN32 /D _WINDOWS -DSQLITE_THREADSAFE=0 -DSQLITE_OMIT_LOAD_EXTENSION -DSQLITE_ENABLE_COLUMN_METADATA
+FLAGS= /DLL /NOLOGO /MACHINE:X86 /SUBSYSTEM:WINDOWS,5.01
+!endif
+
+.SUFFIXES: .o
+
+OBJS=  \
+ colblob.o \
+ colfloat.o \
+ colint.o \
+ coltext.o \
+ column.o \
+ jsqlite.o \
+ util.o \
+ ../c/sqlite3.o
+
+DEF= jsqlite.def
+
+!ifndef LD
+LD=link
+!endif
+
+.c.o:
+	$(CC) $(CFLAGS) /Fo$@ /c $<
+
+.cpp.o:
+	$(CC) $(CFLAGS) /Fo$@ /c $<
+
+!ifdef x64
+TARGET= libjsqlite3.dll
+!else
+TARGET= libjsqlite3_32.dll
+!endif
+
+$(TARGET) : $(OBJS)
+	$(LD) /NOLOGO /DEF:$(DEF) $(FLAGS) /out:$@ $(OBJS)
+
+all: $(TARGET)
+
+clean:
+	erase /q *.lib *.exp *.o ..\c\*.o
+
+.PHONY: all clean

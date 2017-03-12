@@ -1,0 +1,11 @@
+1. make a symlink in jni folder
+
+$ cd jni ; ln -s ../.. src ; cd ..
+
+2. build using ndk in the current folder
+
+$ ndk-build
+
+binaries in libs folder
+
+Note:

@@ -6,7 +6,7 @@ static char NullText='\0';
 // ---------------------------------------------------------------------
 ColText::ColText(sqlite3_stmt *sh,int ndx) : Column(sh, ndx)
 {
-  pos=8;
+  pos=SZI;
   type=3;
   wid=30;
   initbuffer();
@@ -15,12 +15,12 @@ ColText::ColText(sqlite3_stmt *sh,int ndx) : Column(sh, ndx)
 // ---------------------------------------------------------------------
 char *ColText::getbuffer()
 {
-  long long end=(long long) pos;
+  I end=(I) pos;
   int bufsize=(int)buffers.size();
   if (bufsize>0)
     end+=len*wid*(4*bufsize-3);
   char *buf=Column::getbuffer();
-  ((long long*)buf)[0]=end;
+  ((I*)buf)[0]=end;
   return buf;
 }
 
@@ -44,7 +44,7 @@ void ColText::step(int row)
   string s((char *)sqlite3_column_text(sh,ndx));
 
   while (1) {
-    len=1+s.size();
+    len=1+(int)s.size();
     if (bufwid >= pos+len)
       break;
     memcpy(buffer+pos,s.c_str(),bufwid-pos);

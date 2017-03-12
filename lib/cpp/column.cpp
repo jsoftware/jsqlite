@@ -10,7 +10,7 @@ Column::Column(sqlite3_stmt *sh, int ndx)
   this->sh=sh;
   this->ndx=ndx;
   name=sqlite3_column_name(sh,ndx);
-  namelen+=1+strlen(name);
+  namelen+=1+(int)strlen(name);
   offset=0;
   len=1020;
   buflen=len;

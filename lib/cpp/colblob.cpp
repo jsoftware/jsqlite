@@ -1,12 +1,12 @@
 
 #include "column.h"
 
-static vector<long long> blobsizes;
+static vector<I> blobsizes;
 
 // ---------------------------------------------------------------------
 ColBlob::ColBlob(sqlite3_stmt *sh,int ndx) : Column(sh, ndx)
 {
-  pos=8;
+  pos=SZI;
   type=4;
   wid=30;
   blobsizes.clear();
@@ -16,19 +16,19 @@ ColBlob::ColBlob(sqlite3_stmt *sh,int ndx) : Column(sh, ndx)
 // ---------------------------------------------------------------------
 char *ColBlob::getbuffer()
 {
-  int rws=blobsizes.size();
-  long long end=(long long) pos;
+  int rws=(int)blobsizes.size();
+  I end=(I) pos;
 
   int bufsize=(int)buffers.size();
   if (bufsize>0)
-    end+=len*wid*(4*bufsize-3);
-  end+=rws*8;
+    end+=len*wid*(4*bufsize-3);   // 4-1=3
+  end+=rws*SZI;
   char *res=(char *)malloc(end);
-  ((long long*)res)[0]=end;
-  memcpy(res+8, &blobsizes[0], rws*8);
-  int hdr=8*(rws+1);
+  ((I*)res)[0]=end;
+  memcpy(res+SZI, &blobsizes[0], rws*SZI);
+  int hdr=SZI*(rws+1);
   char *buf=Column::getbuffer();
-  memcpy(res+hdr, buf+8, end-hdr);
+  memcpy(res+hdr, buf+SZI, end-hdr);
   free(buf);
   return res;
 }

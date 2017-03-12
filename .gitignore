@@ -1,6 +1,11 @@
 web
 *.o
 *.obj
+*.exp
+*.lib
 downlib.sh
 run.sh
 uplib.sh
+lib/android/jni/src
+lib/android/libs
+lib/android/obj

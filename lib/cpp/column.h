@@ -24,7 +24,7 @@ public:
   const char *name;
   int ndx;
   int offset;
-  long long type;
+  int type;
   int wid;
   sqlite3_stmt *sh;
 };
@@ -54,7 +54,7 @@ class ColInt : public Column
 public:
   ColInt(sqlite3_stmt *, int);
   void step(int);
-  long long *mybuffer;
+  I *mybuffer;
 };
 
 // ---------------------------------------------------------------------

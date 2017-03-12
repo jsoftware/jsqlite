@@ -1,7 +1,11 @@
 
 #include "column.h"
 
-static double NullFloat=-1/0.0;
+#ifdef _MSC_VER
+static double NullFloat=-std::numeric_limits<double>::infinity();
+#else
+static double NullFloat=-1.0/0.0;
+#endif
 
 // ---------------------------------------------------------------------
 ColFloat::ColFloat(sqlite3_stmt * sh, int ndx) : Column(sh, ndx)
