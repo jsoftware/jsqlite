@@ -1,0 +1,6 @@
+web
+*.o
+*.obj
+downlib.sh
+run.sh
+uplib.sh
