@@ -32,12 +32,10 @@ struct Result {
 };
 
 // ---------------------------------------------------------------------
-// return extension version in the form 100 base major,minor
+// return extension version in the form 100 base major,minor, e.g. 101
 int sqlite3_extversion()
 {
-  int major=1;
-  int minor=1;
-  return 100*major + minor;
+  return 102;
 }
 
 // ---------------------------------------------------------------------

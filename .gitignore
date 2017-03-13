@@ -4,6 +4,9 @@ web
 *.obj
 *.exp
 *.lib
+*.dll
+*.dylib
+*.so
 downlib.sh
 run.sh
 uplib.sh
