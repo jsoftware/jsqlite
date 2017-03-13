@@ -6,7 +6,11 @@ round=: [ * [: <. 0.5 + %~
 NB. =========================================================
 sqlite3=: 3 : 0
 'db cmd'=. y
-2!:0 '/usr/bin/sqlite3 ',db,' "',cmd,'"'
+if. IFWIN do.
+  spawn_jtask_ 'sqlite3.exe "',(winpathsep db),'" "',cmd,'"'
+else.
+  2!:0 '/usr/bin/sqlite3 "',db,'" "',cmd,'"'
+end.
 )
 
 NB. =========================================================
