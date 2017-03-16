@@ -15,10 +15,14 @@ A=: p:i.len
 B=: 0.000001 round o.A
 C=: ":each B
 D=: C ,each 7{a.
+D=: (<'') (10*i.<.len%10) }D
+NB. D=: len#<''
 
 cls=: ;/'abcd'
 dbinsert 'tab';cls;<A;B;C;<D
 dbreads 'tab'
+NB. check number of items for each column
+echo #&> >@{: dbread 'tab'
 
 NB. read these records
 ndx=: 6?.len
