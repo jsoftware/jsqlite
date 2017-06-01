@@ -50,6 +50,7 @@ void ColText::step(int row)
     memcpy(buffer+pos,s.c_str(),bufwid-pos);
     s=s.substr(bufwid-pos);
     pushbuffer();
+    bufwid=buflen*wid;
     pos=0;
   }
   memcpy(buffer+pos,s.c_str(),len);

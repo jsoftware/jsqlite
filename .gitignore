@@ -9,6 +9,7 @@ web
 *.so
 downlib.sh
 run.sh
+upbinaries.sh
 uplib.sh
 lib/android/jni/src
 lib/android/libs

@@ -53,6 +53,7 @@ void ColBlob::step(int row)
     pushbuffer();
     s+=bufwid-pos;
     bytes-=bufwid-pos;
+    bufwid=buflen*wid;
     pos=0;
   }
 

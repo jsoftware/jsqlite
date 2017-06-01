@@ -35,7 +35,7 @@ struct Result {
 // return extension version in the form 100 base major,minor, e.g. 101
 int sqlite3_extversion()
 {
-  return 102;
+  return 103;
 }
 
 // ---------------------------------------------------------------------
