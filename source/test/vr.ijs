@@ -1,6 +1,6 @@
 NB. vr - Jd lab vehicle registration database
 
-require 'data/sqlite/sqlitez'
+load 'data/sqlite/sqlitez'
 
 NB. utilities
 toss=: ? @ (# #) { ]              NB. toss x dice with faces y

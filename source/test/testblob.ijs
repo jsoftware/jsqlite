@@ -1,16 +1,11 @@
 NB. testblob
 
-require 'debug data/sqlite/sqlitez'
-dbcreate '~temp/t1.db'
-empty dbcmd 'create table tab (d blob)'
+load 'data/sqlite/sqlitez'
+load '~Sqlite/test/gen.ijs'
 
-bloblen=: 100000
+gen 5
+genx ''
 
-D=: 5$<''
-D=: (bloblen#each 'abc') 0 2 4} D
-empty dbinsert 'tab';(<'d');<D
-
-D=: (<bloblen#{.a.) 2} D
-empty dbcmd 'update tab set d=zeroblob(',(":bloblen),') where rowid=3'
-
-smoutput D=dbexec 'tab'
+a=: dbexec'ctext from test'
+b=: dbexec'dblob from test'
+b -: a rplc each <'a';({.a.);'o';({:a.);'s';'7'

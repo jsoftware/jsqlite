@@ -1,5 +1,10 @@
 other
 web
+source/cdb
+source/base
+source/ddsqlite
+source/save
+source/zfns
 *.o
 *.obj
 *.exp
@@ -14,3 +19,5 @@ uplib.sh
 lib/android/jni/src
 lib/android/libs
 lib/android/obj
+lib/cpp/makelinux.sh
+

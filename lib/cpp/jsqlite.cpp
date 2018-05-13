@@ -35,7 +35,7 @@ struct Result {
 // return extension version in the form 100 base major,minor, e.g. 101
 int sqlite3_extversion()
 {
-  return 103;
+  return 104;
 }
 
 // ---------------------------------------------------------------------
@@ -57,10 +57,8 @@ int sqlite3_read_values(sqlite3_stmt *sh, void **res)
 {
   Result *vals = (Result *)malloc(sizeof(Result));
 
-//  int i, pos, step, type;
   int i, pos, step;
   const char *name;
-//  Column *column;
 
 // init columns
   int numcols=sqlite3_column_count(sh);

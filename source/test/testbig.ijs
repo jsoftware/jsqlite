@@ -2,7 +2,7 @@ NB. testbig
 NB.
 NB. make db of given length and check selected records
 
-require 'data/sqlite/sqlitez'
+load 'data/sqlite/sqlitez'
 round=: [ * [: <. 0.5 + %~
 
 dbcreate '~temp/t1.db'
@@ -17,10 +17,11 @@ B=: 0.000001 round o.A
 C=: ":each B
 D=: C ,each 7{a.
 D=: (<'') (10*i.<.len%10) }D
-NB. D=: len#<''
 
 cls=: ;/'abcd'
+
 dbinsert 'tab';cls;<A;B;C;<D
+
 dbcmd 'update tab set d=zeroblob(',(":bloblen),') where rowid in (1,2,4,5,8)'
 dbcmd 'update tab set d="',(bloblen#'a'),'" where rowid in (3,6,7)'
 NB. dbreads 'a,b,c from tab'
