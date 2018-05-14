@@ -2,7 +2,7 @@ NB. iris dataset
 
 load 'data/sqlite/sqlitez plot'
 
-dbopen_psqlite_ '~.Sqlite/db/datasets.sqlite'
+dbopen_psqlite_ '~.Sqlite/db/datasets.db'
 
 Note''
 dbtables''
