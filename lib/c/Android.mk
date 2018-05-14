@@ -13,7 +13,7 @@ ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
 endif
 ifeq ($(TARGET_ARCH_ABI),armeabi)
   LOCAL_CFLAGS := -fPIC -Os -fno-strict-aliasing -fomit-frame-pointer -mfloat-abi=softfp -mfpu=vfp -march=armv5te
-  LOCAL_ARM_MODE := arm
+  LOCAL_ARM_MODE := thumb
 endif
 ifeq ($(TARGET_ARCH),mips)
   LOCAL_CFLAGS := -fPIC -O1 -fno-strict-aliasing -fomit-frame-pointer

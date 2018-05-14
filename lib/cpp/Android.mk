@@ -14,7 +14,7 @@ ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
 endif
 ifeq ($(TARGET_ARCH_ABI),armeabi)
   LOCAL_CFLAGS := -fPIC -Os -fno-strict-aliasing -fomit-frame-pointer -mfloat-abi=softfp -mfpu=vfp -march=armv5te
-  LOCAL_ARM_MODE := arm
+  LOCAL_ARM_MODE := thumb
 endif
 ifeq ($(TARGET_ARCH),mips)
   LOCAL_CFLAGS := -fPIC -O1 -fno-strict-aliasing -fomit-frame-pointer
@@ -26,7 +26,7 @@ ifeq ($(TARGET_ARCH),x86)
   LOCAL_CFLAGS := -fPIC -O1 -fno-strict-aliasing -fomit-frame-pointer -malign-double -march=i686 -mtune=intel -mssse3 -mfpmath=sse -fno-stack-protector
 endif
 
-LOCAL_SRC_FILES:= colblob.cpp colfloat.cpp colint.cpp coltext.cpp column.cpp jsqlite.cpp util.cpp
+LOCAL_SRC_FILES:= colblob.cpp colfloat.cpp colint.cpp coltext.cpp column.cpp jsqlite.cpp parm.cpp util.cpp write.cpp
 
 LOCAL_CFLAGS += -DSQLITE_THREADSAFE=0 -DSQLITE_OMIT_LOAD_EXTENSION -DSQLITE_ENABLE_COLUMN_METADATA
 
