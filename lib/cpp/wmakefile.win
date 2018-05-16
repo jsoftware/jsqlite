@@ -15,7 +15,9 @@ OBJS=  \
  coltext.o \
  column.o \
  jsqlite.o \
+ parm.o \
  util.o \
+ write.o \
  ../c/sqlite3.o
 
 DEF= jsqlite.def

@@ -45,7 +45,7 @@ int ParmInt::bind(int i)
 // ---------------------------------------------------------------------
 int ParmText::bind(int i)
 {
-  int n=strlen(buf);
+  int n=(int)strlen(buf);
   int r=sqlite3_bind_text(sh,ndx,(const char*)buf,n,SQLITE_STATIC);
   buf += n+1;
   return r;
