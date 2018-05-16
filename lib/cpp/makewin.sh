@@ -9,7 +9,7 @@ rm -f libjsqlite3.dll *.obj
 CC=x86_64-w64-mingw32-g++
 TGT=libjsqlite3.dll
 
-for f in util colblob colfloat colint coltext column jsqlite; do
+for f in util colblob colfloat colint coltext column jsqlite parm write; do
   $CC -c -I. -DSQLITE_THREADSAFE=0 -DSQLITE_OMIT_LOAD_EXTENSION -DSQLITE_ENABLE_COLUMN_METADATA $f.cpp -o $f.obj;
 done
 
