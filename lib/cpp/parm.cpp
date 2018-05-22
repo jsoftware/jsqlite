@@ -50,6 +50,7 @@ int ParmInt::bind(int i)
   else
     return sqlite3_bind_int64(sh,ndx,n);
 #else
+  I n=((I*)buf)[i];
   if (n==NullInt)
     return sqlite3_bind_null(sh,ndx);
   else
