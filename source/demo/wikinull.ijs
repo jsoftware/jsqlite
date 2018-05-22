@@ -13,8 +13,3 @@ sqlcmd__db 'update tab set a=NULL,b=NULL,c=NULL,d=NULL where rowid=2'
 dat=. NullInt_psqlite_;NullFloat_psqlite_;NullText_psqlite_;NullText_psqlite_
 sqlinsert__db 'tab';(;/'abcd');<dat
 echo sqlreads__db 'tab'
-
-NB. =========================================================
-Note''
-smoutput a.i.3!:1[1{sqlexec__db 'b from tab'
-)

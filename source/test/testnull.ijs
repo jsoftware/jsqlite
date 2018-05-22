@@ -26,9 +26,16 @@ dbopen '~temp/test.db'
 dbreads 'tab'
 dat=. NullInt_psqlite_;NullFloat_psqlite_;NullText_psqlite_;NullText_psqlite_
 dbinsert 'tab';(;/'abcd');<dat
+
+ai=. NullInt_psqlite_+1
+af=. {. _2 (3!:5) a.{~ 239 (6) } 8#255
+at=. NullText_psqlite_,'z'
+dat=. ai;af;at;at
+dbinsert 'tab';(;/'abcd');<dat
 dbreads 'tab'
 
 dbclose''
 load 'data/sqlite/sqlitez'
 dbopen '~temp/test.db'
 dbreads 'tab'
+af -: {:dbexec 'b from tab'

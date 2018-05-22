@@ -22,7 +22,7 @@ ParmBlob::ParmBlob(sqlite3_stmt* sh, int ndx, int rws, char* buf) : Parm(sh, ndx
 int ParmBlob::bind(int i)
 {
   int r;
-  if (0==strncmp(blb,NullText,strlen(NullText)))
+  if (len[i]==strlen(NullText) && 0==strncmp(blb,NullText,len[i]))
     r=sqlite3_bind_null(sh,ndx);
   else
     r=sqlite3_bind_blob(sh,ndx,(const void*)blb,len[i],SQLITE_STATIC);
