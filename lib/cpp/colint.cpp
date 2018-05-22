@@ -1,11 +1,11 @@
 
 #include "column.h"
 
-#if defined(_WIN64)||defined(__LP64__)
-static I NullInt=0x8000000000000000LL;
-#else
-static I NullInt=0x80000000L;
-#endif
+//#if defined(_WIN64)||defined(__LP64__)
+//static I NullInt=0x8000000000000000LL;
+//#else
+//static I NullInt=0x80000000L;
+//#endif
 
 // ---------------------------------------------------------------------
 ColInt::ColInt(sqlite3_stmt *sh,int ndx) : Column(sh, ndx)

@@ -1,8 +1,6 @@
 
 #include "column.h"
 
-static char NullText='\0';
-
 // ---------------------------------------------------------------------
 ColText::ColText(sqlite3_stmt *sh,int ndx) : Column(sh, ndx)
 {
@@ -29,6 +27,7 @@ void ColText::step(int row)
 {
   int len;
   int bufwid=buflen*wid;
+  string s;
 
   if (pos==bufwid) {
     pushbuffer();
@@ -36,12 +35,10 @@ void ColText::step(int row)
     pos=0;
   }
 
-  if (SQLITE_NULL==sqlite3_column_type(sh,ndx)) {
-    buffer[pos++]=NullText;
-    return;
-  }
-
-  string s((char *)sqlite3_column_text(sh,ndx));
+  if (SQLITE_NULL==sqlite3_column_type(sh,ndx))
+    s=string(NullText);
+  else
+    s=string((char *)sqlite3_column_text(sh,ndx));
 
   while (1) {
     len=1+(int)s.size();

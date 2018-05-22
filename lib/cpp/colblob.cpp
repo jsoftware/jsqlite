@@ -36,14 +36,20 @@ char *ColBlob::getbuffer()
 // ---------------------------------------------------------------------
 void ColBlob::step(int row)
 {
+  char *s;
+  int bytes;
+  int bufwid=buflen*wid;
+
+  cout << "blob" << sqlite3_column_type(sh,ndx) << endl;
+
   if (SQLITE_NULL==sqlite3_column_type(sh,ndx)) {
-    blobsizes.push_back(0);
-    return;
+    s=NullText;
+    bytes=strlen(s);
+  } else {
+    s=(char *)sqlite3_column_blob(sh,ndx);
+    bytes=sqlite3_column_bytes(sh,ndx);
   }
 
-  int bufwid=buflen*wid;
-  char *s=(char *)sqlite3_column_blob(sh,ndx);
-  int bytes=sqlite3_column_bytes(sh,ndx);
   blobsizes.push_back(bytes);
 
   while (1) {

@@ -27,4 +27,8 @@ extern bool DEBUG;
 #define Debug(x) if (DEBUG) __android_log_write(ANDROID_LOG_DEBUG,"libjsqlite3",(x).c_str())
 #endif
 
+extern I NullInt;
+extern double NullFloat;
+extern char* NullText;
+
 #endif

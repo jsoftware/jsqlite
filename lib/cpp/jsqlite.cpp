@@ -11,6 +11,7 @@ extern "C" {
 #include "column.h"
 
 extern "C" {
+  int sqlite3_extopen(const char *, sqlite3 **, int, I, double, const char *, const char *);
   int sqlite3_extversion();
   int sqlite3_free_values(void **);
   int sqlite3_read_values(sqlite3_stmt *, void **);
@@ -20,6 +21,9 @@ static Column *get_column_class(sqlite3_stmt *, int, int);
 static int get_column_types(sqlite3_stmt *, int, vector<int> &);
 
 bool DEBUG=false;
+I NullInt;
+double NullFloat;
+char* NullText=0;
 
 // ---------------------------------------------------------------------
 struct Result {
@@ -32,10 +36,23 @@ struct Result {
 };
 
 // ---------------------------------------------------------------------
+// cover for open that adds the text/blob null value
+int sqlite3_extopen(const char* file, sqlite3** hnd, int flgs,
+                    I ni, double nd, const char* nt, const char* vfs)
+{
+  NullInt=ni;
+  NullFloat=nd;
+  free(NullText);
+  NullText=(char*)malloc(strlen(nt)+1);
+  strcpy(NullText,nt);
+  return sqlite3_open_v2(file, hnd, flgs, vfs);
+}
+
+// ---------------------------------------------------------------------
 // return extension version in the form 100 base major,minor, e.g. 101
 int sqlite3_extversion()
 {
-  return 104;
+  return 105;
 }
 
 // ---------------------------------------------------------------------
