@@ -2,7 +2,7 @@
 #
 # see ../cpp/Makefile for tested compilers
 
-CC=g++
+CC=g++ $(M32)
 
 CFLAGS=-O2 -fPIC -I. \
 	-D SQLITE_ENABLE_COLUMN_METADATA=1 \
