@@ -237,4 +237,4 @@ sqlite3_win32_write_debug
 sqlite3_extversion
 sqlite3_free_values
 sqlite3_read_values
-sqlite3_write_values
+sqlite3_exec_values

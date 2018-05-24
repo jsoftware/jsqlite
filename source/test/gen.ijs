@@ -34,15 +34,15 @@ a=. 10+?rws$90
 b=. 0.001 round_psqlite_ 0.1 * o.a
 c=. nms {~ ?rws##nms
 d=. c rplc each <'a';({.a.);'o';({:a.);'s';'7'
-nth=. 3 : '<: y * 1 + i. <. rws % y'
-n=. nth 3
+nth=. 4 : '<: y * 1 + i. <. x % y'
+n=. rws nth 3
 c=. (<'') n} c
 d=. (<'') n} d
-n=. nth 4
-a=. NullInt_psqlite_ n} a
+n=. rws nth 4
+a=. SQLITE_NULL_INTEGER_psqlite_ n} a
 b=. __ n} b
-c=. (<SQLITE_NULL_VALUE) n} c
-d=. (<SQLITE_NULL_VALUE) n} d
+c=. (<SQLITE_NULL_TEXT_psqlite_) n} c
+d=. (<SQLITE_NULL_TEXT_psqlite_) n} d
 sqlinsert__locDB 'test';cls;<a;b;c;<d
 dbhead 'test'
 )

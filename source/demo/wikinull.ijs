@@ -10,6 +10,6 @@ sqlinsert__db 'tab';(;:'a b c d');<1 2;3.1 5.4;s
 sqlreads__db 'tab'
 
 sqlcmd__db 'update tab set a=NULL,b=NULL,c=NULL,d=NULL where rowid=2'
-dat=. NullInt_psqlite_;NullFloat_psqlite_;NullText_psqlite_;NullText_psqlite_
+dat=. SQLITE_NULL_INTEGER_psqlite_;SQLITE_NULL_FLOAT_psqlite_;SQLITE_NULL_TEXT_psqlite_;SQLITE_NULL_TEXT_psqlite_
 sqlinsert__db 'tab';(;/'abcd');<dat
 echo sqlreads__db 'tab'

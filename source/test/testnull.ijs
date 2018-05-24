@@ -4,7 +4,7 @@ load 'data/sqlite/sqlitez'
 db=: dbcreate '~temp/test.db'
 dbcmd 'create table tab (a int,b float,c text,d blob)'
 
-dat=. NullInt_psqlite_;NullFloat_psqlite_;NullText_psqlite_;NullText_psqlite_
+dat=. SQLITE_NULL_INTEGER_psqlite_;SQLITE_NULL_FLOAT_psqlite_;SQLITE_NULL_TEXT_psqlite_;SQLITE_NULL_TEXT_psqlite_
 dbinsert 'tab';(;/'abcd');<dat
 dbreads 'tab'
 dbmeta 'tab'
@@ -18,18 +18,18 @@ dbcmd 'update tab set a=NULL,b=NULL,c=NULL,d=NULL where rowid=2'
 dbreads 'tab'
 
 NB. set nulls:
-NullInt_psqlite_=: 22
-NullFloat_psqlite_=: 33.3
-NullText_psqlite_=: 'Nullah'
+SQLITE_NULL_INTEGER_psqlite_=: 22
+SQLITE_NULL_FLOAT_psqlite_=: 33.3
+SQLITE_NULL_TEXT_psqlite_=: 'Nullah'
 dbclose''
 dbopen '~temp/test.db'
 dbreads 'tab'
-dat=. NullInt_psqlite_;NullFloat_psqlite_;NullText_psqlite_;NullText_psqlite_
+dat=. SQLITE_NULL_INTEGER_psqlite_;SQLITE_NULL_FLOAT_psqlite_;SQLITE_NULL_TEXT_psqlite_;SQLITE_NULL_TEXT_psqlite_
 dbinsert 'tab';(;/'abcd');<dat
 
-ai=. NullInt_psqlite_+1
+ai=. SQLITE_NULL_INTEGER_psqlite_+1
 af=. {. _2 (3!:5) a.{~ 239 (6) } 8#255
-at=. NullText_psqlite_,'z'
+at=. SQLITE_NULL_TEXT_psqlite_,'z'
 dat=. ai;af;at;at
 dbinsert 'tab';(;/'abcd');<dat
 dbreads 'tab'

@@ -40,8 +40,6 @@ void ColBlob::step(int row)
   int bytes;
   int bufwid=buflen*wid;
 
-  cout << "blob" << sqlite3_column_type(sh,ndx) << endl;
-
   if (SQLITE_NULL==sqlite3_column_type(sh,ndx)) {
     s=NullText;
     bytes=strlen(s);

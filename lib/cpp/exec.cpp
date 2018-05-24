@@ -3,13 +3,13 @@
 #include "parm.h"
 
 extern "C" {
-  int sqlite3_write_values(sqlite3_stmt*, int, int, int*, int*, char*);
+  int sqlite3_exec_values(sqlite3_stmt*, int, int, int*, int*, char*);
 }
 
 static Parm *get_parm_class(sqlite3_stmt*, int, int, int, char*);
 
 // ---------------------------------------------------------------------
-int sqlite3_write_values(sqlite3_stmt* sh, int rws, int cls, int *typ, int* len, char* dat)
+int sqlite3_exec_values(sqlite3_stmt* sh, int rws, int cls, int *typ, int* len, char* dat)
 {
   int i, j, step;
   int pos=0;

@@ -1,10 +1,9 @@
 NB. testempty
 NB. test empty and null
+
 load 'data/sqlite/sqlitez'
 load '~Sqlite/test/gen.ijs'
 
-dbg 1
-dbstops'fixwrite'
 genempty 10
 
 a=: dbexec'ctext from test'

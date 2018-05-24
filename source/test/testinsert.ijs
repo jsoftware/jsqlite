@@ -1,4 +1,4 @@
-NB. testwrite
+NB. test insert
 
 load 'data/sqlite'
 
