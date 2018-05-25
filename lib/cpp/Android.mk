@@ -26,7 +26,7 @@ ifeq ($(TARGET_ARCH),x86)
   LOCAL_CFLAGS := -fPIC -O1 -fno-strict-aliasing -fomit-frame-pointer -malign-double -march=i686 -mtune=intel -mssse3 -mfpmath=sse -fno-stack-protector
 endif
 
-LOCAL_SRC_FILES:= colblob.cpp colfloat.cpp colint.cpp coltext.cpp column.cpp jsqlite.cpp parm.cpp util.cpp write.cpp
+LOCAL_SRC_FILES:= colblob.cpp colfloat.cpp colint.cpp coltext.cpp column.cpp exec.cpp jsqlite.cpp parm.cpp util.cpp
 
 LOCAL_CFLAGS += -DSQLITE_THREADSAFE=0 -DSQLITE_OMIT_LOAD_EXTENSION -DSQLITE_ENABLE_COLUMN_METADATA
 
