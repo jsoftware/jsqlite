@@ -7,7 +7,7 @@ gen 5
 dbhead 'test'
 
 sel=. 'update test set bfloat=? where aint=?'
-typ=. SQLITE_FLOAT,SQLITE_INTEGER
+typ=. SQLITE_FLOAT_psqlite_,SQLITE_INTEGER_psqlite_
 dat=. 123.45;75
 sqlparm__locDB sel;typ;<dat
 dbhead 'test'
