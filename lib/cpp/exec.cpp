@@ -3,7 +3,6 @@
 #include "parm.h"
 
 extern "C" {
-  int sqlite3_exec_values(sqlite3_stmt*, int, int, int*, int*, char*);
 }
 
 static Parm *get_parm_class(sqlite3_stmt*, int, int, int, char*);
@@ -32,7 +31,31 @@ int sqlite3_exec_values(sqlite3_stmt* sh, int rws, int cls, int *typ, int* len, 
   for (i=0; i<cls; i++)
     delete parms[i];
 
+  sqlite3_finalize(sh);
   return 0;
+}
+
+// ---------------------------------------------------------------------
+int sqlite3_select_values(sqlite3_stmt* sh, void **res, int cls, int *typ, int* len, char* dat)
+{
+  int i;
+  int pos=0;
+
+  Parm **parms=(Parm **)malloc(cls * sizeof(char *));
+  for (i=0; i<cls; i++) {
+    parms[i]=get_parm_class(sh,typ[i],i+1,1,dat+pos);
+    pos+=len[i];
+  }
+
+  for (i=0; i<cls; i++)
+    parms[i]->bind(0);
+
+  int rc = sqlite3_read_values(sh, res);
+
+  for (i=0; i<cls; i++)
+    delete parms[i];
+
+  return rc;
 }
 
 // ---------------------------------------------------------------------

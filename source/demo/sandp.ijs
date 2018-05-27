@@ -1,14 +1,8 @@
 NB. wiki sandp examples
 
-load 'data/sqlite/sqlitez data/sqlite/sandp'
+load 'data/sqlite/sqlitez data/sqlite/sandp ~Sqlite/demo/util.ijs'
 
-fx=: 3 : 0
-dat=. ":y
-if. 89<{:$dat do.
- (86{."1 dat) ,"1 '..'
-end.
-)
-
+NB. =========================================================
 db=: buildsandp ''
 sqltables__db''
 sqlmeta__db 's'

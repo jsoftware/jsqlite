@@ -10,13 +10,6 @@ extern "C" {
 #include "jsqlite.h"
 #include "column.h"
 
-extern "C" {
-  int sqlite3_extopen(const char *, sqlite3 **, int, I, double, const char *, const char *);
-  int sqlite3_extversion();
-  int sqlite3_free_values(void **);
-  int sqlite3_read_values(sqlite3_stmt *, void **);
-}
-
 static Column *get_column_class(sqlite3_stmt *, int, int);
 static int get_column_types(sqlite3_stmt *, int, vector<int> &);
 
@@ -52,7 +45,7 @@ int sqlite3_extopen(const char* file, sqlite3** hnd, int flgs,
 // return extension version in the form 100 base major,minor, e.g. 101
 int sqlite3_extversion()
 {
-  return 105;
+  return 106;
 }
 
 // ---------------------------------------------------------------------
@@ -80,6 +73,8 @@ int sqlite3_read_values(sqlite3_stmt *sh, void **res)
 // init columns
   int numcols=sqlite3_column_count(sh);
 
+  cout << "numcols" << numcols << endl;
+
   vector<int> types(numcols,0);
   step=get_column_types(sh,numcols,types);
   if (step==1) return step;
@@ -90,7 +85,9 @@ int sqlite3_read_values(sqlite3_stmt *sh, void **res)
 
 // get data
   pos=0;
+  cout << "getdata" << numcols << endl;
   while (SQLITE_ROW == (step=sqlite3_step(sh))) {
+    cout << "in getdata loop" << numcols << endl;
     for (i=0; i<numcols; i++)
       columns[i]->step(pos);
     pos++;
@@ -122,6 +119,8 @@ int sqlite3_read_values(sqlite3_stmt *sh, void **res)
 
   for (i=0; i<numcols; i++)
     delete columns[i];
+
+  cout << "end of read" << step << endl;
 
   return step;
 }

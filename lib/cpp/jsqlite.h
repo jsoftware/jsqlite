@@ -31,4 +31,13 @@ extern I NullInt;
 extern double NullFloat;
 extern char* NullText;
 
+extern "C" {
+  int sqlite3_extopen(const char *, sqlite3 **, int, I, double, const char *, const char *);
+  int sqlite3_extversion();
+  int sqlite3_exec_values(sqlite3_stmt*, int, int, int*, int*, char*);
+  int sqlite3_free_values(void **);
+  int sqlite3_read_values(sqlite3_stmt *, void **);
+  int sqlite3_select_values(sqlite3_stmt*, void **, int, int*, int*, char*);
+}
+
 #endif

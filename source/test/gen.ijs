@@ -16,7 +16,7 @@ b=. 0.001 round_psqlite_ 0.1 * o.a
 c=. nms {~ ?rws##nms
 d=. c rplc each <'a';({.a.);'o';({:a.);'s';'7'
 sqlinsert__locDB 'test';cls;<a;b;c;<d
-dbhead 'test'
+NB. dbhead 'test'
 )
 
 NB. =========================================================
