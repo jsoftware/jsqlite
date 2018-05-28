@@ -11,10 +11,12 @@ dat=. 123.45;75
 sqlparm__locDB sel;typ;<dat
 dbhead 'test'
 
+sqlcmd__locDB 'begin;'
 sel=. 'update test set aint=?, bfloat=?, ctext=? where dblob=?'
 typ=. SQLITE_INTEGER,SQLITE_FLOAT,SQLITE_TEXT,SQLITE_BLOB
 dat=. 235;314.159;'williams';'bl',({.a.),'ke'
 sqlparm__locDB sel;typ;<dat
+sqlcmd__locDB 'commit;'
 dbhead 'test'
 
 sel=. 'select * from test where aint=?'
