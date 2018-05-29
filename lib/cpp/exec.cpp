@@ -5,30 +5,32 @@
 extern "C" {
 }
 
-static int exec(void **);
-static int rollback(void **);
+static int exec(sqlite3 *);
+static int rollback(sqlite3 *);
 static Parm *get_parm_class(sqlite3_stmt*, int, int, int, char*);
 
 // ---------------------------------------------------------------------
-int exec(void **ch, const char* cmd)
+int exec(sqlite3 *ch, const char* cmd)
 {
-  return sqlite3_exec((sqlite3 *)ch,cmd,0,0,0);
+  return sqlite3_exec(ch,cmd,0,0,0);
 }
 
 // ---------------------------------------------------------------------
-int rollback(void **ch, int rc)
+int rollback(sqlite3 *ch, int rc)
 {
   exec(ch,"rollback");
   return rc;
 }
 
 // ---------------------------------------------------------------------
-int sqlite3_exec_values(void **ch, const char* sel, int rws, int cls, int *typ, int* len, char* dat)
+int sqlite3_exec_values(void **hp, const char* sel, int rws, int cls, int *typ, int* len, char* dat)
 {
   int i, j, step;
   int pos=0;
 
-  exec(ch,"begin");
+  sqlite3 *ch = (sqlite3 *) hp;
+  int autocommit=sqlite3_get_autocommit(ch);
+  if (autocommit) exec(ch,"begin");
 
   sqlite3_stmt *sh;
   int rc = prepare(ch,sel,&sh);
@@ -54,19 +56,19 @@ int sqlite3_exec_values(void **ch, const char* sel, int rws, int cls, int *typ, 
 
   sqlite3_finalize(sh);
 
-  exec(ch,"commit");
+  if (autocommit) exec(ch,"commit");
 
   return 0;
 }
 
 // ---------------------------------------------------------------------
-int sqlite3_select_values(void **ch, const char* sel, void **res, int cls, int *typ, int* len, char* dat)
+int sqlite3_select_values(void **hp, const char* sel, void **res, int cls, int *typ, int* len, char* dat)
 {
   int i;
   int pos=0;
 
   sqlite3_stmt *sh;
-  int rc = prepare(ch,sel,&sh);
+  int rc = prepare((sqlite3 *)hp,sel,&sh);
   if (rc) return rc;
 
   Parm **parms=(Parm **)malloc(cls * sizeof(char *));

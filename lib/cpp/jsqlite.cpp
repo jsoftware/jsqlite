@@ -63,18 +63,18 @@ int sqlite3_free_values(void **res)
 }
 
 // ---------------------------------------------------------------------
-int sqlite3_read_values(void **ch, const char* sel, void **res)
+int sqlite3_read_values(void **hp, const char* sel, void **res)
 {
   sqlite3_stmt *sh;
-  int rc = prepare(ch,sel,&sh);
+  int rc = prepare((sqlite3 *)hp,sel,&sh);
   if (rc) return rc;
   return readvalues(sh, res);
 }
 
 // ---------------------------------------------------------------------
-int prepare(void **ch, const char *sel, sqlite3_stmt **sh)
+int prepare(sqlite3 *ch, const char *sel, sqlite3_stmt **sh)
 {
-  return sqlite3_prepare_v2((sqlite3 *)ch,sel,strlen(sel),sh,0);
+  return sqlite3_prepare_v2(ch,sel,strlen(sel),sh,0);
 }
 
 // ---------------------------------------------------------------------

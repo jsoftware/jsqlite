@@ -31,7 +31,7 @@ extern I NullInt;
 extern double NullFloat;
 extern char* NullText;
 
-int prepare(void **,const char *,sqlite3_stmt **);
+int prepare(sqlite3 *,const char *,sqlite3_stmt **);
 int readvalues(sqlite3_stmt *, void **);
 
 extern "C" {
