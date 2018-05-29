@@ -63,7 +63,22 @@ int sqlite3_free_values(void **res)
 }
 
 // ---------------------------------------------------------------------
-int sqlite3_read_values(sqlite3_stmt *sh, void **res)
+int sqlite3_read_values(void **ch, const char* sel, void **res)
+{
+  sqlite3_stmt *sh;
+  int rc = prepare(ch,sel,&sh);
+  if (rc) return rc;
+  return readvalues(sh, res);
+}
+
+// ---------------------------------------------------------------------
+int prepare(void **ch, const char *sel, sqlite3_stmt **sh)
+{
+  return sqlite3_prepare_v2((sqlite3 *)ch,sel,strlen(sel),sh,0);
+}
+
+// ---------------------------------------------------------------------
+int readvalues(sqlite3_stmt *sh, void **res)
 {
   Result *vals = (Result *)malloc(sizeof(Result));
 
@@ -72,8 +87,6 @@ int sqlite3_read_values(sqlite3_stmt *sh, void **res)
 
 // init columns
   int numcols=sqlite3_column_count(sh);
-
-  cout << "numcols" << numcols << endl;
 
   vector<int> types(numcols,0);
   step=get_column_types(sh,numcols,types);
@@ -85,9 +98,7 @@ int sqlite3_read_values(sqlite3_stmt *sh, void **res)
 
 // get data
   pos=0;
-  cout << "getdata" << numcols << endl;
   while (SQLITE_ROW == (step=sqlite3_step(sh))) {
-    cout << "in getdata loop" << numcols << endl;
     for (i=0; i<numcols; i++)
       columns[i]->step(pos);
     pos++;
@@ -120,8 +131,7 @@ int sqlite3_read_values(sqlite3_stmt *sh, void **res)
   for (i=0; i<numcols; i++)
     delete columns[i];
 
-  cout << "end of read" << step << endl;
-
+  sqlite3_finalize(sh);
   return step;
 }
 

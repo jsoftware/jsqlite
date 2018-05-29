@@ -19,5 +19,6 @@ uplib.sh
 lib/android/jni/src
 lib/android/libs
 lib/android/obj
+lib/cpp/makeall.sh
 lib/cpp/makelinux.sh
 

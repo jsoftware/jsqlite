@@ -1,6 +1,6 @@
 #!/bin/bash
 
-R=105
+R=807
 
 SVR=root@anna
 T=/var/www/html/download/sqlitebin/$R/*

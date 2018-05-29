@@ -31,13 +31,16 @@ extern I NullInt;
 extern double NullFloat;
 extern char* NullText;
 
+int prepare(void **,const char *,sqlite3_stmt **);
+int readvalues(sqlite3_stmt *, void **);
+
 extern "C" {
   int sqlite3_extopen(const char *, sqlite3 **, int, I, double, const char *, const char *);
   int sqlite3_extversion();
-  int sqlite3_exec_values(sqlite3_stmt*, int, int, int*, int*, char*);
+  int sqlite3_exec_values(void **, const char *, int, int, int*, int*, char*);
   int sqlite3_free_values(void **);
-  int sqlite3_read_values(sqlite3_stmt *, void **);
-  int sqlite3_select_values(sqlite3_stmt*, void **, int, int*, int*, char*);
+  int sqlite3_read_values(void **, const char *, void **);
+  int sqlite3_select_values(void **, const char *, void **, int, int*, int*, char*);
 }
 
 #endif
