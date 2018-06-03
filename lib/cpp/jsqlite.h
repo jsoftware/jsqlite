@@ -32,7 +32,6 @@ extern double NullFloat;
 extern char* NullText;
 
 int prepare(sqlite3 *,const char *,sqlite3_stmt **);
-int readvalues(sqlite3_stmt *, void **);
 
 extern "C" {
   int sqlite3_extopen(const char *, sqlite3 **, int, I, double, const char *, const char *);
@@ -41,6 +40,7 @@ extern "C" {
   int sqlite3_free_values(void **);
   int sqlite3_read_values(void **, const char *, void **);
   int sqlite3_select_values(void **, const char *, void **, int, int*, int*, char*);
+  int readvalues(sqlite3_stmt *, void **);
 }
 
 #endif

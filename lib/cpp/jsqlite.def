@@ -240,4 +240,5 @@ sqlite3_exec_values
 sqlite3_free_values
 sqlite3_read_values
 sqlite3_select_values
+readvalues
 
