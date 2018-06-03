@@ -12,7 +12,11 @@ UNAME=$(shell uname -s)
 ifeq ($(UNAME),Darwin)
 	TGT=libjsqlite3.dylib
 else
+ifeq ($(M32),-m32)
+	TGT=libjsqlite3_32.so
+else
 	TGT=libjsqlite3.so
+endif
 endif
 
 SRC=$(wildcard *.cpp)
