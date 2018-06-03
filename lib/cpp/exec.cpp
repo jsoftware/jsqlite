@@ -34,7 +34,7 @@ int sqlite3_exec_values(void **hp, const char* sel, int rws, int cls, int *typ, 
 
   sqlite3_stmt *sh;
   int rc = prepare(ch,sel,&sh);
-  if (rc) return rollback(ch,rc);
+  if (rc) return (autocommit)?rollback(ch,rc):rc;
 
   Parm **parms=(Parm **)malloc(cls * sizeof(char *));
   for (i=0; i<cls; i++) {
@@ -46,7 +46,7 @@ int sqlite3_exec_values(void **hp, const char* sel, int rws, int cls, int *typ, 
     for (j=0; j<cls; j++)
       parms[j]->bind(i);
     step=sqlite3_step(sh);
-    if (SQLITE_DONE != step) return rollback(ch,step);
+    if (SQLITE_DONE != step) {sqlite3_finalize(sh); return (autocommit)?rollback(ch,step):step;}
     sqlite3_clear_bindings(sh);
     sqlite3_reset(sh);
   }
