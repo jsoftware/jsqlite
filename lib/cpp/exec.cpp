@@ -46,7 +46,10 @@ int sqlite3_exec_values(void **hp, const char* sel, int rws, int cls, int *typ, 
     for (j=0; j<cls; j++)
       parms[j]->bind(i);
     step=sqlite3_step(sh);
-    if (SQLITE_DONE != step) {sqlite3_finalize(sh); return (autocommit)?rollback(ch,step):step;}
+    if (SQLITE_DONE != step) {
+      for (j=0; j<cls; j++) delete parms[j];
+      sqlite3_finalize(sh); return (autocommit)?rollback(ch,step):step;
+    }
     sqlite3_clear_bindings(sh);
     sqlite3_reset(sh);
   }
