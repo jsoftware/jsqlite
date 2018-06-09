@@ -68,7 +68,9 @@ int sqlite3_read_values(void **hp, const char* sel, void **res)
   sqlite3_stmt *sh;
   int rc = prepare((sqlite3 *)hp,sel,&sh);
   if (rc) return rc;
-  return readvalues(sh, res);
+  rc = readvalues(sh, res);
+  sqlite3_finalize(sh);
+  return rc;
 }
 
 // ---------------------------------------------------------------------
@@ -131,7 +133,6 @@ int readvalues(sqlite3_stmt *sh, void **res)
   for (i=0; i<numcols; i++)
     delete columns[i];
 
-  sqlite3_finalize(sh);
   return step;
 }
 
