@@ -33,6 +33,7 @@ struct Result {
 int sqlite3_extopen(const char* file, sqlite3** hnd, int flgs,
                     I ni, double nd, const char* nt, const char* vfs)
 {
+  if (!nt) return SQLITE_MISUSE;
   NullInt=ni;
   NullFloat=nd;
   free(NullText);
@@ -45,7 +46,7 @@ int sqlite3_extopen(const char* file, sqlite3** hnd, int flgs,
 // return extension version in the form 100 base major,minor, e.g. 101
 int sqlite3_extversion()
 {
-  return 106;
+  return 107;
 }
 
 // ---------------------------------------------------------------------
