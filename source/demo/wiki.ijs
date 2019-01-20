@@ -15,6 +15,7 @@ dbtables''
 dbhead 'trackid,name,composer from tracks where name like "%snow%"'
 6 dbhead 'artists left join albums where artists.artistid=albums.artistid'
 dbhead 'customers'
+
 F=: '~temp/t2.db'
 db=: sqlcreate_psqlite_ F
 dir F

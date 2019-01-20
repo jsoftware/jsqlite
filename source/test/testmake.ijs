@@ -32,11 +32,11 @@ txt=. ;: 'alice bob charlie dave ethel'
 blb=. (;: 'bone btwo bthree bfour') ,each _3<\'沒有沒漢'
 cmd=. ''
 for_i. i.y do.
- a=. p:i
- b=. 0.001 round o.1+i
- c=. (5|i) pick txt
- d=. (4|i) pick blb
- cmd=. cmd,'insert into tab values (',(":a),',',(":b),',''',c,''',''',d,''');'
+  a=. p:i
+  b=. 0.001 round o.1+i
+  c=. (5|i) pick txt
+  d=. (4|i) pick blb
+  cmd=. cmd,'insert into tab values (',(":a),',',(":b),',''',c,''',''',d,''');'
 end.
 cmd=. 'begin;',cmd,';commit;'
 sqlite3 F;cmd

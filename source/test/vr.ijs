@@ -1,68 +1,62 @@
 NB. vr - Jd lab vehicle registration database
 
-load 'data/sqlite/sqlitez'
-
-NB. utilities
-toss=: ? @ (# #) { ]              NB. toss x dice with faces y
-wordlines=: [: ;: [: ; ,&' ';._2  NB. multiline wf
-
-MAKES=: 10{.each ;:'Ford Dodge Buick Pontiac Hudson Rambler Toyota Honda Accura VW Mercedes'
-COLORS=: 10{.each ;:'Red Green Blue Grey Pink Yellow Mauve Maroon'
-TDATA=: 10{.each ''; ;:'Due Unpaid Dead'
-
-FIRSTNAME=: 10{.each wordlines 0 : 0
-  Alex Amit Anne Boris Boyd Bruce Carlos Clare Dale Darryn Dianne Graham
-  Harlan Harry Helen Jason Jody Johnny Julien Klaus Lewis Linda Lynne Marc
-  Margot Milane Munroe Noel Owen Pam Rose Ross Shawn Skip Tom Toshio Troy
-  Vin Vince
-)
-
-LASTNAME=: 10{.each wordlines 0 : 0
-  Abbott Adams Algar Anctil Andrews Beale Boudreau Brady Briscoe Budd
-  Cahill Davis Dilworth Donohoe Downs Fobear Foster Gerow Glancey Gordon
-  Green Hill Johnson Keegan Keller Kelly Kerik McBride McKee Miller Mills
-  Newton Patrick Patten Power Rogerson Stearn Sullivan Tang Taylor
-  Thompson
-)
-
-VCols=: 'lic int,make text,color text,year int,fine float,firstname text,lastname text,comment text'
+NB. =========================================================
+NB. define Jd vr
+load 'jd'
+load '~addons/data/jd/tutorial/demo/vr_tut.ijs'
 
 NB. =========================================================
-NB. generate y random vr records
-VData=: 3 : 0
-lic=. licx+i.y NB. 1e6+?~y
-licx=: licx+y
-make=. >y toss MAKES
-color=. >y toss COLORS
-year=. 1900 + ?y$99
-fine=. (+ 10*0<]) 0.01 * (?y$5000) * (?100)=100|i.y
-firstname=. >y toss FIRSTNAME
-lastname=. >y toss LASTNAME
-comment=. >TDATA {~ (0 < fine) * ? y $ #TDATA
-lic;make;color;year;fine;firstname;lastname;<comment
+NB. define sqlite vr
+load 'data/sqlite/sqlitez'
+s3Cols=: commasep deb each cutopen VCols rplc 'byte';'text';' 10';''
+
+NB. =========================================================
+s3VData=: 3 : 0
+dat=. VData y
+ndx=. 1 2 5 6 7
+(<@dtb"1 each ndx{dat) ndx}dat
 )
 
 NB. =========================================================
 buildvr=: 3 : 0
-'db len'=. y
+len=. y
+db=. '~temp/vr.db'
 dbcreate db
-dbcmd 'create table vr (',VCols,')'
+dbcmd 'create table vr (',s3Cols,')'
+dbcmd 'create index idx_make on vr (make)'
 blk=. 100000
 licx=: 1e9
+cls=. ' 'taketo each ',' cutopen s3Cols
 while. len > 0 do.
-  dbinsert 'vr';'';<VData len <. blk
+  dbinsert 'vr';cls;<s3VData len <. blk
   len=. len - blk
 end.
 EMPTY
 )
 
 NB. =========================================================
+buildboth=: 3 : 0
+build y
+buildvr y
+)
+
+buildboth 1e3
+
+NB. =========================================================
 Note''
-buildvr '~temp/vr.db';1e3
+NB. sizing:
+buildboth 5e4
+buildboth 1e5
+buildboth 1e6
+
+NB. testing:
+jd 'info summary'
 dbsize 'vr'
-dbhead 'vr'
-dbtail 'vr'
-dbhead 'count(lic), make from vr group by make'
-dbhead 'vr where lic<1000000100 and make="Ford"'
-dbhead 'vr where comment<>""'
+
+# each jd 'reads from vr where make="Ford" and lic<1000000100'
+# each dbreads 'vr where make="Ford" and lic<1000000100'
+
+timex 'jd ''reads from vr where make="Ford" and lic<1000000100'''
+timex 'dbreads ''vr where make="Ford" and lic<1000000100'''
+
 )
