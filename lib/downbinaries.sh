@@ -1,8 +1,8 @@
 #!/bin/bash
 
-R=807
+R=901
 
-SVR=root@anna
+SVR=root@alice
 T=/var/www/html/download/sqlitebin/$R/*
 P=/home/chris/temp/sqlitebin
 C=/home/chris/dev/apps/sqlite/lib/web

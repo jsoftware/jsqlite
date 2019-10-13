@@ -12,7 +12,7 @@ dbtail 'tracks'
 dbtail 'TrackId, AlbumId,GenreId,MediaTypeId,Composer from tracks where MediaTypeId in (3,4)'
 
 dbopen '~addons/data/sqlite/db/sandp.db'
-f=. 4 : 'astable_psqlite_ x sqltailx__locDB y'
+f=. 4 : 'astable_psqlite_ <"1 x sqltailx__locDB y'
 5 f 'sp'
 5 f 'qty,pid from sp'
 5 f 'qty,pid from sp where pid="p2"'

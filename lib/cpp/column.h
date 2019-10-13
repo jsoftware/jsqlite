@@ -19,6 +19,7 @@ public:
 
   char *buffer;
   vector<char *>buffers;
+  vector<I>blobsizes;
   int buflen;
   int len;
   const char *name;

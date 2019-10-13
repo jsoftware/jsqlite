@@ -16,6 +16,7 @@ downlib.sh
 run.sh
 upbinaries.sh
 uplib.sh
+lib/archive
 lib/android/jni/src
 lib/android/libs
 lib/android/obj

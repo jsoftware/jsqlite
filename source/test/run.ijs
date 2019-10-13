@@ -5,6 +5,7 @@ testall=: 3 : 0
 loadd '~Sqlite/test/testread.ijs'
 loadd '~Sqlite/test/testbig.ijs'
 loadd '~Sqlite/test/testblob.ijs'
+loadd '~Sqlite/test/testblob2.ijs'
 loadd '~Sqlite/test/testdelete.ijs'
 loadd '~Sqlite/test/testempty.ijs'
 loadd '~Sqlite/test/testinsert.ijs'

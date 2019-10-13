@@ -1,1 +1,3 @@
-This is the sqlite amalgamation source, downloaded from http://www.sqlite.org/download.html.
+This is the sqlite amalgamation source, downloaded from https://www.sqlite.org/download.html .
+
+Version: 3.30.1

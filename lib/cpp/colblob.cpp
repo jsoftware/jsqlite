@@ -1,8 +1,6 @@
 
 #include "column.h"
 
-static vector<I> blobsizes;
-
 // ---------------------------------------------------------------------
 ColBlob::ColBlob(sqlite3_stmt *sh,int ndx) : Column(sh, ndx)
 {

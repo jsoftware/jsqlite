@@ -47,7 +47,7 @@ int sqlite3_extopen(const char* file, sqlite3** hnd, int flgs,
 // return extension version in the form 100 base major,minor, e.g. 101
 int sqlite3_extversion()
 {
-  return 107;
+  return 108;
 }
 
 // ---------------------------------------------------------------------
