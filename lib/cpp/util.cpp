@@ -80,7 +80,8 @@ string i2s(int i)
 }
 
 // ---------------------------------------------------------------------
-#ifdef ANDROID
+// #ifdef ANDROID
+#if 0
 
 #define CTYPE_NUM_CHARS 256
 const short _tolower_tab_[1 + CTYPE_NUM_CHARS] = {

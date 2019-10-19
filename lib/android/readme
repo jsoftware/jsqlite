@@ -6,6 +6,9 @@ $ cd jni ; ln -s ../.. src ; cd ..
 
 $ ndk-build
 
+for armeabi target, use gcc and older version of ndk
+$ NDK_TOOLCHAIN_VERSION=4.9 ~/android/android-ndk-r14b/ndk-build
+
 binaries in libs folder
 
 Note:
