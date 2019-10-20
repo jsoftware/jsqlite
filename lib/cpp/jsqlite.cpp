@@ -34,7 +34,11 @@ int sqlite3_extopen(const char* file, sqlite3** hnd, int flgs,
                     I ni, double nd, const char* nt, const char* vfs)
 {
   if (!nt) return SQLITE_MISUSE;
-  if (ni == 0) ni=-9223372036854775807L - 1;
+#if defined(_WIN64)||defined(__LP64__)
+  if (ni == 0) ni=-9223372036854775807LL - 1;
+#else
+  if (ni == 0) ni=-2147483647L - 1;
+#endif
   NullInt=ni;
   NullFloat=nd;
   free(NullText);
