@@ -4,10 +4,19 @@
 #  g++ 5.4.0 20160609 (Linux)
 #  clang 703.0.29     (OSX)
 
+UNAME=$(shell uname -s)
+
+ifeq ($(UNAME),Darwin)
+CC=clang++
+
+ifeq ($(ARCH),"")
+ARCH=$(shell arch)
+endif
+CFLAGS=-arch $(ARCH) -O2 -fPIC -I. -DSQLITE_THREADSAFE=0 -DSQLITE_OMIT_LOAD_EXTENSION -DSQLITE_ENABLE_COLUMN_METADATA
+else
 CC=g++ $(M32)
 CFLAGS=-O2 -fPIC -I. -DSQLITE_THREADSAFE=0 -DSQLITE_OMIT_LOAD_EXTENSION -DSQLITE_ENABLE_COLUMN_METADATA
-
-UNAME=$(shell uname -s)
+endif
 
 ifeq ($(UNAME),Darwin)
 	TGT=libjsqlite3.dylib
@@ -23,10 +32,10 @@ SRC=$(wildcard *.cpp)
 OBJ=$(SRC:%.cpp=%.o)
 
 all: $(OBJ)
-	$(CC) -shared ../c/sqlite3.o $(OBJ) -o $(TGT)
+	$(CC) $(CFLAGS) -shared ../c/sqlite3.o $(OBJ) -o $(TGT)
 
 %.o: %.cpp
 	$(CC) -c $(CFLAGS) $^
 
 clean:
-	rm -f *.o *.so
+	rm -f *.o *.so *.dylib
