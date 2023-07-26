@@ -17,15 +17,15 @@ ifeq ($(TARGET_ARCH_ABI),armeabi)
   LOCAL_ARM_MODE := thumb
 endif
 ifeq ($(TARGET_ARCH),x86_64)
-  LOCAL_CFLAGS := -fPIC -O2 -fno-strict-aliasing -malign-double -march=x86-64 -mtune=intel -msse4.2 -mpopcnt -fno-stack-protector
+  LOCAL_CFLAGS := -fPIC -O2 -fno-strict-aliasing -malign-double -march=x86-64 -msse4.2 -mpopcnt -fno-stack-protector
 endif
 ifeq ($(TARGET_ARCH),x86)
-  LOCAL_CFLAGS := -fPIC -O2 -fno-strict-aliasing -malign-double -march=i686 -mtune=intel -mssse3 -mfpmath=sse -fno-stack-protector
+  LOCAL_CFLAGS := -fPIC -O2 -fno-strict-aliasing -malign-double -march=i686 -mssse3 -mfpmath=sse -fno-stack-protector
 endif
 
 LOCAL_SRC_FILES:= sqlite3.c
 
-LOCAL_CFLAGS += -DSQLITE_THREADSAFE=0 -DSQLITE_OMIT_LOAD_EXTENSION -DSQLITE_ENABLE_COLUMN_METADATA
+LOCAL_CFLAGS += -DSQLITE_THREADSAFE=0 -DSQLITE_OMIT_LOAD_EXTENSION -DSQLITE_ENABLE_COLUMN_METADATA -DSQLITE_ENABLE_FTS5
 
 include $(BUILD_STATIC_LIBRARY)
 

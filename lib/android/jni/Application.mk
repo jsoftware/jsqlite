@@ -7,6 +7,6 @@ APP_STL := c++_static
 APP_ABI := armeabi-v7a x86 x86_64 arm64-v8a
 # APP_ABI := armeabi
 # android 4.0
-APP_PLATFORM := android-14
+APP_PLATFORM := android-19
 # android 2.3.1
 # APP_PLATFORM := android-9
