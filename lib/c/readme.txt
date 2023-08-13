@@ -1,3 +1,3 @@
 This is the sqlite amalgamation source, downloaded from https://www.sqlite.org/download.html .
 
-Version: 3.30.1
+Version: 3.42.0
