@@ -8,3 +8,8 @@ the extension in sqlite/lib/cpp.
 
 To cross-compile 32-bit binaries, pass M32=-m32 to make.
 $ make M32=-m32
+
+When updating the addon, also update the jsqlite version number in
+
+* lib/cpp/jsqlite.cpp, function sqlite3_extversion
+* source/base/lib.ijs, noun binreq

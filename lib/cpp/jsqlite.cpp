@@ -1,4 +1,5 @@
 /* jsqlite.cpp  */
+/* jsqlite version defined in sqlite3_extversion */
 
 #ifdef ANDROID
 extern "C" {
@@ -51,7 +52,7 @@ int sqlite3_extopen(const char* file, sqlite3** hnd, int flgs,
 // return extension version in the form 100 base major,minor, e.g. 101
 int sqlite3_extversion()
 {
-  return 108;
+  return 109;
 }
 
 // ---------------------------------------------------------------------
@@ -185,4 +186,3 @@ int get_column_types(sqlite3_stmt *sh, int numcols, vector<int> &types)
 
   return 0;
 }
-

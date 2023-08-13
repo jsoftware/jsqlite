@@ -38,4 +38,5 @@ all: $(OBJ)
 	$(CC) -c $(CFLAGS) $^
 
 clean:
-	rm -f *.o *.so *.dylib
+	rm -f *.o
+
