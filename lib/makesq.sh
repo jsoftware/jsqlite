@@ -6,20 +6,23 @@ T=~/temp/sqlite
 mkdir -p $T
 rm -rf $T/*
 
-cd c && make clean && make && \
-cd ../cpp && make clean && make && \
+if [ "`uname`" = "OpenBSD" ] || [ "`uname`" = "FreeBSD" ]; then
+  make=gmake
+else
+  make="${make:=make}"
+fi
+
+cd c && $make clean && $make && \
+cd ../cpp && $make clean && $make && \
 cp *.so $T/. && cd ..
 
-cd c && make M32=-m32 clean && make M32=-m32 && \
-cd ../cpp && make M32=-m32 clean && make M32=-m32 && \
+if [ "`uname`" = "Linux" ] && [ "`uname -m`" = "x86_64" ] ; then
+
+cd c && $make M32=-m32 clean && $make M32=-m32 && \
+cd ../cpp && $make M32=-m32 clean && $make M32=-m32 && \
 cp *.so $T/. && cd ..
+
+fi
 
 exit 0
 
-cd c && ./makewin.sh && \
-cd ../cpp && ./makewin.sh && \
-cd ..
-
-cd c && ./makewin32.sh && \
-cd ../cpp && ./makewin32.sh && \
-cd ..
