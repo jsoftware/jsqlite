@@ -10,6 +10,7 @@ CC=${CC-clang}
 export CC
 
 mkdir -p $HOME/temp
+mkdir -p $HOME/vm
 
 if [ "$1" = "linux" ]; then
   ext="so"

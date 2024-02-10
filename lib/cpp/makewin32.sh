@@ -15,4 +15,4 @@ done
 
 $CC -shared -static-libgcc -static-libstdc++ ../c/sqlite3_32.obj *.obj -o $TGT
 
-cp *.dll ~/vm/d
+cp *.dll ~/vm/d || true
