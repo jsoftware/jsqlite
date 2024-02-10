@@ -1,0 +1,33 @@
+github builds
+
+Whenever the jsqlite repo is updated, the JSQLITE binaries are built and standard tests are run.
+
+The process is defined in the repo workflow:
+
+  .github/workflows/jsqlite.yml
+
+This workflow calls files in the repo script:
+
+  buildga.cmd   - windows builds
+
+  buildga.sh    - non-windows builds
+
+Builds take place on runners which are machines created dynamically for each OS.
+
+If there is any failure, the entire workflow is halted.
+
+To see the status of a run, login to github and visit:
+
+  https://github.com/jsoftware/jsqlite/actions
+
+Recent runs are shown with a status mark. Drill down into a run name for the compile logs.
+
+If a run completes successfully, the JSQLITE binaries and test results are written to github area:
+
+  https://github.com/jsoftware/jsqlite/releases/tag/build
+
+If the version is updated in the repo version.txt file, then after the first successful build the JSQLITE binaries are copied to the corresponding download area on the J webserver, e.g.
+
+  https://www.jsoftware.com/download/sqlitebin
+
+Github actions are documented at https://docs.github.com/en/actions

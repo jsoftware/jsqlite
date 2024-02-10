@@ -1,0 +1,531 @@
+name: JSQLITE
+
+on:
+ push:
+  branches: [ master ]
+
+# trigger workflow on file change
+#on:
+# push:
+#  paths:
+#   - 'version.txt'
+
+# if: ${{ false }}
+
+jobs:
+
+# linux ----------------------------------------------------------------
+ jsqlitelinux:
+  name: JSQLITE (Linux)
+  runs-on: ubuntu-20.04
+  steps:
+   - name: Checkout Git repository
+     uses: actions/checkout@v3
+
+   - name: Setup Environment (Linux)
+     run: script/install-lnx.sh
+
+   - name: Commit
+     run: script/commit.sh ${{ github.sha }} ${{ github.actor }}
+
+   - name: Build JSQLITE (Linux)
+     env:
+      CC: clang
+     run: |
+      script/buildga.sh linux || exit 1
+
+   - name: Release JSQLITE (Linux)
+     uses: ncipollo/release-action@v1
+     with:
+      tag: build
+      artifacts: "l64.zip"
+      token: ${{ secrets.GITHUB_TOKEN }}
+      allowUpdates: true
+      replacesArtifacts: true
+
+# macOS ----------------------------------------------------------------
+ jsqlitemacos:
+  name: JSQLITE (macOS)
+  runs-on: macos-12
+  steps:
+   - name: Checkout Git repository
+     uses: actions/checkout@v3
+
+#   - name: Setup Environment (macOS)
+
+   - name: Build JSQLITE (macOS)
+     env:
+      CC: clang
+     run: |
+      script/buildga.sh darwin || exit 1
+
+   - name: Release JSQLITE (macOS)
+     uses: ncipollo/release-action@v1
+     with:
+      tag: build
+      artifacts: "m64.zip"
+      token: ${{ secrets.GITHUB_TOKEN }}
+      allowUpdates: true
+      replacesArtifacts: true
+
+# rpi64 ----------------------------------------------------------------
+ jsqliterpi64:
+  name: JSQLITE (Raspberry)
+  runs-on: ubuntu-20.04
+  steps:
+   - name: Checkout Git repository
+     uses: actions/checkout@v3
+
+   - name: Build JSQLITE (Raspberry)
+     uses: pguyot/arm-runner-action@v2
+     with:
+      cpu: cortex-a53
+      cpu_info: cpuinfo/raspberrypi_zero2_w_arm64
+      base_image: raspios_lite_arm64:latest
+      image_additional_mb: 1024
+      copy_artifact_path: j64
+      commands: |
+       apt-get install --no-install-recommends -y clang zip
+       export CC=clang
+       script/buildga.sh raspberry || exit 1
+       ls -l j64
+       zip -r rpi64.zip j64
+       rm -rf j64
+       mkdir j64
+       mv rpi64.zip j64/.
+       find j64 -type d -exec chmod a+rwx {} \;
+       find j64 -type f -exec chmod a+rw {} \;
+
+   - name: Compress Files (Raspberry)
+     run: |
+      ls -l j64
+      mv j64/* .
+
+   - name: Release JSQLITE (Raspberry)
+     uses: ncipollo/release-action@v1
+     with:
+      tag: build
+      artifacts: "rpi64.zip"
+      token: ${{ secrets.GITHUB_TOKEN }}
+      allowUpdates: true
+      replacesArtifacts: true
+
+# rpi32 ----------------------------------------------------------------
+ jsqliterpi32:
+  name: JSQLITE (Raspberry32)
+  runs-on: ubuntu-20.04
+  steps:
+   - name: Checkout Git repository
+     uses: actions/checkout@v3
+
+   - name: Build JSQLITE (Raspberry 32)
+     uses: pguyot/arm-runner-action@v2
+     with:
+      cpu: arm1176
+      cpu_info: cpuinfo/raspberrypi_zero2_w
+      base_image: raspbian_lite:2020-02-13
+      image_additional_mb: 1024
+      copy_artifact_path: j32
+      commands: |
+       apt-get install --no-install-recommends -y zip
+       export CC=gcc
+       script/buildga.sh raspberry || exit 1
+       find j32 -type d -exec chmod a+rwx {} \;
+       find j32 -type f -exec chmod a+rw {} \;
+       ls -l j32
+       zip -r rpi32d.zip j32
+       cd j32
+       strip -S jconsole
+       strip -S libj.so
+       strip -S libtsdll.so
+       strip -S jamalgam || true
+       strip -S libgmp.so
+       cd -
+       zip -r rpi32.zip j32
+       rm -rf j32
+       mkdir j32
+       mv rpi32.zip j32/.
+       mv rpi32d.zip j32/.
+       find j32 -type d -exec chmod a+rwx {} \;
+       find j32 -type f -exec chmod a+rw {} \;
+
+   - name: Compress Files (Raspberry32)
+     run: |
+      ls -l j32
+      mv j32/* .
+
+   - name: Release JSQLITE (Raspberry32)
+     uses: ncipollo/release-action@v1
+     with:
+      tag: build
+      artifacts: "rpi32.zip,rpi32d.zip"
+      token: ${{ secrets.GITHUB_TOKEN }}
+      allowUpdates: true
+      replacesArtifacts: true
+
+# openbsd --------------------------------------------------------------
+ jsqliteopenbsd:
+  name: JSQLITE (OpenBSD vmactions)
+  if: ${{ false }}
+  runs-on: macos-12
+  steps:
+   - name: Checkout Git repository
+     uses: actions/checkout@v3
+
+   - name: Build JSQLITE (OpenBSD)
+     uses: vmactions/openbsd-vm@v0
+     with:
+      usesh: true
+      sync: sshfs
+      prepare: |
+       rdate time.cloudflare.com || true
+       pkg_add curl zip gmake nasm pcre2 libedit
+
+      run: |
+       rm -f jobdone
+       /sbin/ldconfig -r
+       ls -al ~/
+       ls -al ~/.ssh
+       echo "Host *" >>~/.ssh/config || true
+       echo " ServerAliveInterval 20" >>~/.ssh/config || true
+       echo " ServerAliveCountMax 2000000" >>~/.ssh/config || true
+       echo "client ssh config"
+       cat ~/.ssh/config || true
+       export CC=clang
+       script/buildga.sh openbsd || exit 1
+       ls -l j64
+       zip -r obsd64.zip j64
+       touch jobdone
+
+   - name: Check Status (OpenBSD)
+     run: |
+      test -f jobdone || exit 1
+
+   - name: Release JSQLITE (OpenBSD)
+     uses: ncipollo/release-action@v1
+     with:
+      tag: build
+      artifacts: "obsd64.zip"
+      token: ${{ secrets.GITHUB_TOKEN }}
+      allowUpdates: true
+      replacesArtifacts: true
+
+# openbsd --------------------------------------------------------------
+ jsqliteopenbsd2:
+  name: JSQLITE (OpenBSD cross-platform-actions)
+  runs-on: macos-12
+  steps:
+   - name: Checkout Git repository
+     uses: actions/checkout@v3
+
+   - name: Build JSQLITE (OpenBSD)
+     uses: cross-platform-actions/action@v0.10.0
+     with:
+      operating_system: openbsd
+      architecture: x86-64
+      version: '7.2'
+      shell: bash
+
+      run: |
+       rm -f jobdone
+       sudo rdate time.cloudflare.com || true
+       sudo pkg_add curl zip gmake nasm pcre2 libedit
+       /sbin/ldconfig -r
+       ls -al ~/
+       ls -al ~/.ssh
+       sudo echo "Host *" >>~/.ssh/config || true
+       sudo echo " ServerAliveInterval 20" >>~/.ssh/config || true
+       sudo echo " ServerAliveCountMax 2000000" >>~/.ssh/config || true
+       echo "client ssh config"
+       sudo cat ~/.ssh/config || true
+       export CC=clang
+       script/buildga.sh openbsd || exit 1
+       ls -l j64
+       zip -r obsd64zip j64
+       touch jobdone
+
+   - name: Check Status (OpenBSD)
+     run: |
+      test -f jobdone || exit 1
+
+   - name: Release JSQLITE (OpenBSD)
+     uses: ncipollo/release-action@v1
+     with:
+      tag: build
+      artifacts: "obsd64.zip"
+      token: ${{ secrets.GITHUB_TOKEN }}
+      allowUpdates: true
+      replacesArtifacts: true
+
+# openbsd arm64 --------------------------------------------------------
+ jsqliteopenbsdarm64:
+  name: JSQLITE (OpenBSD arm64)
+  runs-on: ubuntu-22.04
+  steps:
+   - name: Checkout Git repository
+     uses: actions/checkout@v3
+
+   - name: Build, Test JSQLITE (OpenBSD arm64)
+     uses: cross-platform-actions/action@v0.10.0
+     with:
+      operating_system: openbsd
+      architecture: arm64
+      version: '7.2'
+      shell: bash
+
+      run: |
+       rm -f jobdone
+       sudo rdate time.cloudflare.com || true
+       sudo pkg_add curl zip gmake gmp pcre2 libedit
+       /sbin/ldconfig -r
+       ls -al ~/
+       ls -al ~/.ssh
+       sudo echo "Host *" >>~/.ssh/config || true
+       sudo echo " ServerAliveInterval 20" >>~/.ssh/config || true
+       sudo echo " ServerAliveCountMax 2000000" >>~/.ssh/config || true
+       echo "client ssh config"
+       sudo cat ~/.ssh/config || true
+       export CC=clang
+       script/buildga.sh openbsd || exit 1
+       ls -l j64
+       zip -r obsdarm64.zip j64
+       touch jobdone
+
+   - name: Check Status (OpenBSD arm64)
+     run: |
+      test -f jobdone || exit 1
+
+   - name: Release JSQLITE (OpenBSD arm64)
+     uses: ncipollo/release-action@v1
+     with:
+      tag: build
+      artifacts: "obsdarm64.zip"
+      token: ${{ secrets.GITHUB_TOKEN }}
+      allowUpdates: true
+      replacesArtifacts: true
+
+# freebsd --------------------------------------------------------------
+ jsqlitefreebsd:
+  name: JSQLITE (FreeBSD vmactions)
+  if: ${{ false }}
+  runs-on: macos-12
+  steps:
+   - name: Checkout Git repository
+     uses: actions/checkout@v3
+
+   - name: Build JSQLITE (FreeBSD)
+     uses: vmactions/freebsd-vm@v0
+     with:
+      usesh: true
+      sync: sshfs
+      prepare: |
+       rdate time.cloudflare.com || true
+       pkg install -y curl zip gmake nasm pcre2 libedit
+
+      run: |
+       rm -f jobdone
+       /sbin/ldconfig -r
+       ls -al ~/
+       ls -al ~/.ssh
+       echo "Host *" >>~/.ssh/config || true
+       echo " ServerAliveInterval 20" >>~/.ssh/config || true
+       echo " ServerAliveCountMax 2000000" >>~/.ssh/config || true
+       echo "client ssh config"
+       cat ~/.ssh/config || true
+       export CC=clang
+       script/buildga.sh freebsd || exit 1
+       ls -l j64
+       zip -r fbsd64.zip j64
+       touch jobdone
+
+   - name: Check Status (FreeBSD)
+     run: |
+      test -f jobdone || exit 1
+
+   - name: Release JSQLITE (FreeBSD)
+     uses: ncipollo/release-action@v1
+     with:
+      tag: build
+      artifacts: "fbsd64.zip"
+      token: ${{ secrets.GITHUB_TOKEN }}
+      allowUpdates: true
+      replacesArtifacts: true
+
+# freebsd --------------------------------------------------------------
+ jsqlitefreebsd2:
+  name: JSQLITE (FreeBSD cross-platform-actions)
+  runs-on: ubuntu-latest
+  steps:
+   - name: Checkout Git repository
+     uses: actions/checkout@v3
+
+   - name: Build JSQLITE (FreeBSD)
+     uses: cross-platform-actions/action@v0.10.0
+     with:
+      operating_system: freebsd
+      architecture: x86-64
+      version: '13.1'
+      shell: bash
+
+      run: |
+       rm -f jobdone
+       export IGNORE_OSVERSION=yes
+       sudo rdate time.cloudflare.com || true
+       sudo pkg install -y curl zip gmake nasm pcre2 libedit
+       /sbin/ldconfig -r
+       ls -al ~/
+       ls -al ~/.ssh
+       sudo echo "Host *" >>~/.ssh/config || true
+       sudo echo " ServerAliveInterval 20" >>~/.ssh/config || true
+       sudo echo " ServerAliveCountMax 2000000" >>~/.ssh/config || true
+       echo "client ssh config"
+       sudo cat ~/.ssh/config || true
+       export CC=clang
+       script/buildga.sh freebsd || exit 1
+       ls -l j64
+       zip -r fbsd64.zip j64
+       touch jobdone
+
+   - name: Check Status (FreeBSD)
+     run: |
+      test -f jobdone || exit 1
+
+   - name: Release JSQLITE (FreeBSD)
+     uses: ncipollo/release-action@v1
+     with:
+      tag: build
+      artifacts: "fbsd64.zip"
+      token: ${{ secrets.GITHUB_TOKEN }}
+      allowUpdates: true
+      replacesArtifacts: true
+
+# android --------------------------------------------------------------
+ jsqliteandroid:
+  name: JSQLITE (android)
+  runs-on: macos-12
+  steps:
+   - name: Checkout Git repository
+     uses: actions/checkout@v3
+
+   - name: Setup Environment (android)
+     uses: nttld/setup-ndk@v1
+     with:
+      ndk-version: r25c
+      local-cache: false
+
+   - name: Build JSQLITE (android)
+     env:
+      CC: clang
+     run: |
+      script/buildga.sh android || exit 1
+
+   - name: Release JSQLITE (android)
+     uses: ncipollo/release-action@v1
+     with:
+      tag: build
+      artifacts: "androidlibs.zip"
+      token: ${{ secrets.GITHUB_TOKEN }}
+      allowUpdates: true
+      replacesArtifacts: true
+
+# wasm -----------------------------------------------------------------
+ jsqlitewasm:
+  name: JSQLITE (wasm)
+  runs-on: ubuntu-22.04
+  steps:
+   - name: Checkout Git repository
+     uses: actions/checkout@v3
+
+   - name: Setup Environment (wasm)
+     uses: mymindstorm/setup-emsdk@v11
+
+   - name: Build JSQLITE (wasm)
+     env:
+      CC: emcc
+     run: |
+      script/buildga.sh wasm || exit 1
+      ls -l j32
+      zip -r wasm32.zip j32
+
+   - name: Release JSQLITE (wasm)
+     uses: ncipollo/release-action@v1
+     with:
+      tag: build
+      artifacts: "wasm32.zip"
+      token: ${{ secrets.GITHUB_TOKEN }}
+      allowUpdates: true
+      replacesArtifacts: true
+
+# windows --------------------------------------------------------------
+ jsqlitewin:
+  name: JSQLITE (Windows)
+  runs-on: windows-2022
+  steps:
+   - name: Checkout Git repository
+     uses: actions/checkout@v3
+
+   - name: Setup Environment (Windows)
+     uses: ilammy/msvc-dev-cmd@v1
+     with:
+      arch: amd64
+
+   - name: Build JSQLITE (Windows)
+     shell: cmd
+     run: |
+      script\buildga.cmd x64
+
+   - name: Compress Files (Windows)
+     shell: pwsh
+     run: Compress-Archive j64 w64.zip
+
+   - name: Release JSQLITE (Windows)
+     uses: ncipollo/release-action@v1
+     with:
+      tag: build
+      artifacts: "w64.zip"
+      token: ${{ secrets.GITHUB_TOKEN }}
+      allowUpdates: true
+      replacesArtifacts: true
+
+# windows --------------------------------------------------------------
+ jsqlitewin32:
+  name: JSQLITE (Windows 32)
+  runs-on: windows-2022
+  steps:
+   - name: Checkout Git repository
+     uses: actions/checkout@v3
+
+   - name: Setup Environment (Windows 32)
+     uses: ilammy/msvc-dev-cmd@v1
+     with:
+      arch: x86
+
+   - name: Build JSQLITE (Windows 32)
+     shell: cmd
+     run: |
+      script\buildga.cmd x86
+
+   - name: Compress Files (Windows 32)
+     shell: pwsh
+     run: Compress-Archive j32 w32.zip
+
+   - name: Release JSQLITE (Windows 32)
+     uses: ncipollo/release-action@v1
+     with:
+      tag: build
+      artifacts: "w32.zip"
+      token: ${{ secrets.GITHUB_TOKEN }}
+      allowUpdates: true
+      replacesArtifacts: true
+
+ webhook:
+  name: Run Webhook
+  runs-on: ubuntu-22.04
+  needs: [jsqlitelinux, jsqlitemacos, jsqliterpi64, jsqliterpi32, jsqlitewin, jsqlitewin32, jsqliteandroid, jsqlitefreebsd2, jsqliteopenbsd2]
+  steps:
+   - name: update server
+     uses: distributhor/workflow-webhook@v2
+     env:
+      webhook_url: ${{ secrets.WEBHOOK_URL }}
+      webhook_secret: ${{ secrets.WEBHOOK_SECRET }}
+      data: '{ "id": "jsqlitebuild" }'
