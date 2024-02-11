@@ -4,6 +4,8 @@
 #
 # see ../cpp/makewin.sh for tested compiler
 
+set -vex
+
 rm -f sqlite3.obj
 
 CC=x86_64-w64-mingw32-g++

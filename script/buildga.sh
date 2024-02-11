@@ -5,7 +5,7 @@
 # argument is linux|darwin|raspberry|android|openbsd|freebsd|wasm|win
 # wasm is experimental
 
-set -e
+set -vex
 CC=${CC-clang}
 export CC
 
