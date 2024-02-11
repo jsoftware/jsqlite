@@ -10,7 +10,7 @@ CC=${CC-clang}
 export CC
 
 mkdir -p $HOME/temp
-mkdir -p $HOME/vm
+mkdir -p $HOME/vm/d
 
 if [ "$1" = "linux" ]; then
   ext="so"
@@ -94,7 +94,7 @@ cd lib/c
 cd ../cpp
 ./makewin.sh
 cd ../..
-cp lib/cpp/jsqlite3.dll j64
+cp lib/cpp/libjsqlite3.dll j64
 ls -l j64
 exit 0
 fi
