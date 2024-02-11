@@ -405,6 +405,7 @@ jobs:
 # android --------------------------------------------------------------
  jsqliteandroid:
   name: JSQLITE (android)
+  if: ${{ false }}
   runs-on: macos-12
   steps:
    - name: Checkout Git repository
@@ -434,6 +435,7 @@ jobs:
 # wasm -----------------------------------------------------------------
  jsqlitewasm:
   name: JSQLITE (wasm)
+  if: ${{ false }}
   runs-on: ubuntu-22.04
   steps:
    - name: Checkout Git repository
@@ -462,24 +464,27 @@ jobs:
 # windows --------------------------------------------------------------
  jsqlitewin:
   name: JSQLITE (Windows)
-  runs-on: windows-2022
+  runs-on: ubuntu-20.04
   steps:
    - name: Checkout Git repository
      uses: actions/checkout@v3
 
    - name: Setup Environment (Windows)
-     uses: ilammy/msvc-dev-cmd@v1
-     with:
-      arch: amd64
+     run: script/install-lnx.sh
+
+   - name: Commit
+     run: script/commit.sh ${{ github.sha }} ${{ github.actor }}
 
    - name: Build JSQLITE (Windows)
-     shell: cmd
+     env:
+      CC: clang
      run: |
-      script\buildga.cmd x64
+      script/buildga.sh win || exit 1
 
    - name: Compress Files (Windows)
-     shell: pwsh
-     run: Compress-Archive j64 w64.zip
+     run: |
+      ls -l j64
+      zip -r w64.zip j64
 
    - name: Release JSQLITE (Windows)
      uses: ncipollo/release-action@v1
@@ -490,41 +495,10 @@ jobs:
       allowUpdates: true
       replacesArtifacts: true
 
-# windows --------------------------------------------------------------
- jsqlitewin32:
-  name: JSQLITE (Windows 32)
-  runs-on: windows-2022
-  steps:
-   - name: Checkout Git repository
-     uses: actions/checkout@v3
-
-   - name: Setup Environment (Windows 32)
-     uses: ilammy/msvc-dev-cmd@v1
-     with:
-      arch: x86
-
-   - name: Build JSQLITE (Windows 32)
-     shell: cmd
-     run: |
-      script\buildga.cmd x86
-
-   - name: Compress Files (Windows 32)
-     shell: pwsh
-     run: Compress-Archive j32 w32.zip
-
-   - name: Release JSQLITE (Windows 32)
-     uses: ncipollo/release-action@v1
-     with:
-      tag: build
-      artifacts: "w32.zip"
-      token: ${{ secrets.GITHUB_TOKEN }}
-      allowUpdates: true
-      replacesArtifacts: true
-
  webhook:
   name: Run Webhook
   runs-on: ubuntu-22.04
-  needs: [jsqlitelinux, jsqlitemacos, jsqliterpi64, jsqliterpi32, jsqlitewin, jsqlitewin32, jsqliteandroid, jsqlitefreebsd2, jsqliteopenbsd2]
+  needs: [jsqlitelinux, jsqlitemacos, jsqliterpi64, jsqliterpi32, jsqlitewin, jsqlitefreebsd2, jsqliteopenbsd2]
   steps:
    - name: update server
      uses: distributhor/workflow-webhook@v2

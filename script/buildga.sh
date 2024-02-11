@@ -2,7 +2,7 @@
 #
 # build linux/macOS on github actions
 #
-# argument is linux|darwin|raspberry|android|openbsd|freebsd|wasm
+# argument is linux|darwin|raspberry|android|openbsd|freebsd|wasm|win
 # wasm is experimental
 
 set -e
@@ -26,8 +26,10 @@ elif [ "$1" = "freebsd" ]; then
   ext="so"
 elif [ "$1" = "wasm" ]; then
   ext=""
+elif [ "$1" = "win" ]; then
+  ext="dll"
 else
-  echo "argument is linux|darwin|raspberry|android|openbsd|freebsd|wasm"
+  echo "argument is linux|darwin|raspberry|android|openbsd|freebsd|wasm|win"
   exit 1
 fi
 uname -a
@@ -64,7 +66,7 @@ echo "MAKEFLAGS=$MAKEFLAGS"
 
 if [ "$1" = "android" ]; then
 cd android/jni
-ln -sf ../../lib .
+ln -s -f ../.. src
 cd ../..
 rm -f androidlibs.zip
 # build binary for armeabi-v7a x86 x86_64 arm64-v8a
@@ -77,13 +79,23 @@ fi
 
 if [ "$1" = "wasm" ]; then
 cd lib
-./clean.sh
 USE_WASM=1 CC=emcc AR=emar ./makesq-wasm.sh
 cd ..
 cp bin/$1/j32/* j32
 find j32 -type d -exec chmod 755 {} \;
 find j32 -type f -exec chmod 644 {} \;
 ls -l j32
+exit 0
+fi
+
+if [ "$1" = "win" ]; then
+cd lib/c
+./makewin.sh
+cd ../cpp
+./makewin.sh
+cd ../..
+cp lib/cpp/jsqlite3.dll j64
+ls -l j64
 exit 0
 fi
 
