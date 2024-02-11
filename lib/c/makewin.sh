@@ -4,7 +4,7 @@
 #
 # see ../cpp/makewin.sh for tested compiler
 
-set -vex
+set -e
 
 rm -f sqlite3.obj
 

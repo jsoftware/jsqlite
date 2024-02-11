@@ -4,6 +4,8 @@
 #
 # see ../cpp/makewin32.sh for tested compiler
 
+set -e
+
 rm -f sqlite3_32.obj
 
 CC=i686-w64-mingw32-g++

@@ -4,7 +4,7 @@
 #
 # tested with x86_64-w64-mingw32-g++ (GCC) 5.3.1 20160211
 
-set -vex
+set -e
 
 rm -f libjsqlite3.dll *.obj
 

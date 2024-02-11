@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 # cd `dirname "$(realpath $0)"`
 
 T=~/temp/sqlite

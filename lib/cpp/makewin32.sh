@@ -4,6 +4,8 @@
 #
 # tested with i686-w64-mingw32-g++ (GCC) 6.2.1 20161118
 
+set -e
+
 rm -f libjsqlite3_32.dll *.obj
 
 CC=i686-w64-mingw32-g++
