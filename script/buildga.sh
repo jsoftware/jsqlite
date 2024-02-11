@@ -91,47 +91,29 @@ cd lib
 
 if [ $m64 -eq 1 ]; then
 if [ "$1" = "darwin" ]; then
-./clean.sh
 ./makesq-mac.sh
-elif [ "$1" = "linux" ]; then
-./clean.sh
-./makesq.sh
-fi
-./clean.sh
-if ( [ "$1" = "openbsd" ] || [ "$1" = "freebsd" ] ) && ( [ "`uname -m`" = "aarch64" ] || [ "`uname -m`" = "arm64" ] ) ; then
- ./makesq.sh
 else
- ./makesq.sh
+./makesq.sh
 fi
 else
 ./makesq.sh
 fi
 
-cd -
+cd ..
 
 if [ $m64 -eq 1 ]; then
-if ( [ "$1" = "openbsd" ] || [ "$1" = "freebsd" ] ) && ( [ "`uname -m`" = "aarch64" ] || [ "`uname -m`" = "arm64" ] ) ; then
-cp lib/cpp/libjsqlite3.so j64
+if [ "$1" = "darwin" ]; then
+cp lib/cpp/libjsqlite3.dylib j64
 else
 cp lib/cpp/libjsqlite3.so j64
 fi
 else
 cp lib/cpp/libjsqlite3.so j32
-fi
-
-if [ -d "bin/$1/j64iphoneos" ]; then
-mkdir -p j64/ios
-cp lib/cpp/libjsqlite3.dylib j64/ios/.
-fi
-
-if [ -d "bin/$1/j64iphonesimulator" ]; then
-mkdir -p j64/ios
-cp lib/cpp/libjsqlite3.dylib j64/ios/.
 fi
 
 if [ "$1" = "linux" ]; then
 mkdir -p j32
-cp lib/cpp/libjsqlite3.so j32
+cp lib/cpp/libjsqlite3_32.so j32
 fi
 
 if [ -d j64 ]; then

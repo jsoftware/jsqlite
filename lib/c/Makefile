@@ -10,6 +10,9 @@ endif
 ifeq ($(UNAME),OpenBSD)
 CC=clang
 endif
+ifeq ($(UNAME),Linux)
+CC=gcc
+endif
 
 ifeq ($(UNAME),Darwin)
 CC=clang
@@ -21,7 +24,7 @@ CFLAGS=-arch $(ARCH) -O2 -fPIC -I. \
 	-D SQLITE_ENABLE_COLUMN_METADATA=1 \
 	-DSQLITE_THREADSAFE=0 -DSQLITE_OMIT_LOAD_EXTENSION -DSQLITE_ENABLE_FTS5
 else
-CC=g++ $(M32)
+CC=$(CC) $(M32)
 
 CFLAGS=-O2 -fPIC -I. \
 	-D SQLITE_ENABLE_COLUMN_METADATA=1 \

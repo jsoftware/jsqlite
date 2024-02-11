@@ -20,6 +20,7 @@ if [ "`uname`" = "Linux" ] && [ "`uname -m`" = "x86_64" ] ; then
 
 cd c && $make M32=-m32 clean && $make M32=-m32 && \
 cd ../cpp && $make M32=-m32 clean && $make M32=-m32 && \
+mv libjsqlite3.so libjsqlte3_32.so
 cp *.so $T/. && cd ..
 
 fi
