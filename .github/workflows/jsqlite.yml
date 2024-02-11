@@ -34,11 +34,18 @@ jobs:
      run: |
       script/buildga.sh linux || exit 1
 
+   - name: Compress Files (Linux)
+     run: |
+      ls -l j64
+      zip -r l64.zip j64
+      ls -l j32
+      zip -r l32.zip j32
+
    - name: Release JSQLITE (Linux)
      uses: ncipollo/release-action@v1
      with:
       tag: build
-      artifacts: "l64.zip"
+      artifacts: "l64.zip,l32.zip"
       token: ${{ secrets.GITHUB_TOKEN }}
       allowUpdates: true
       replacesArtifacts: true
@@ -58,6 +65,11 @@ jobs:
       CC: clang
      run: |
       script/buildga.sh darwin || exit 1
+
+   - name: Compress Files (macOS)
+     run: |
+      ls -l j64
+      zip -r m64.zip j64
 
    - name: Release JSQLITE (macOS)
      uses: ncipollo/release-action@v1
