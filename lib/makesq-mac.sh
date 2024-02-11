@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd `dirname "$(realpath $0)"`
+# cd `dirname "$(realpath $0)"`
 
 T=~/temp/sqlite
 mkdir -p $T

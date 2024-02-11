@@ -133,19 +133,10 @@ jobs:
        find j32 -type d -exec chmod a+rwx {} \;
        find j32 -type f -exec chmod a+rw {} \;
        ls -l j32
-       zip -r rpi32d.zip j32
-       cd j32
-       strip -S jconsole
-       strip -S libj.so
-       strip -S libtsdll.so
-       strip -S jamalgam || true
-       strip -S libgmp.so
-       cd -
        zip -r rpi32.zip j32
        rm -rf j32
        mkdir j32
        mv rpi32.zip j32/.
-       mv rpi32d.zip j32/.
        find j32 -type d -exec chmod a+rwx {} \;
        find j32 -type f -exec chmod a+rw {} \;
 
@@ -158,7 +149,7 @@ jobs:
      uses: ncipollo/release-action@v1
      with:
       tag: build
-      artifacts: "rpi32.zip,rpi32d.zip"
+      artifacts: "rpi32.zip"
       token: ${{ secrets.GITHUB_TOKEN }}
       allowUpdates: true
       replacesArtifacts: true

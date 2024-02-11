@@ -6,6 +6,13 @@
 
 UNAME=$(shell uname -s)
 
+ifeq ($(UNAME),FreeBSD)
+CC=clang++
+endif
+ifeq ($(UNAME),OpenBSD)
+CC=clang++
+endif
+
 ifeq ($(UNAME),Darwin)
 CC=clang++
 
