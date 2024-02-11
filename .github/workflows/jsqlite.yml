@@ -244,7 +244,7 @@ jobs:
        export CC=clang
        script/buildga.sh openbsd || exit 1
        ls -l j64
-       zip -r obsd64zip j64
+       zip -r obsd64.zip j64
        touch jobdone
 
    - name: Check Status (OpenBSD)
