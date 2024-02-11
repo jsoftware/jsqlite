@@ -6,7 +6,7 @@ set -e
 
 T=~/temp/sqlite
 mkdir -p $T
-rm $T/*
+rm -f $T/*
 
 mkdir -p $T && \
 cd c && make clean && make ARCH=x86_64 && \
