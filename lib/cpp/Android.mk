@@ -28,7 +28,7 @@ LOCAL_SRC_FILES:= colblob.cpp colfloat.cpp colint.cpp coltext.cpp column.cpp exe
 
 LOCAL_CFLAGS += -DSQLITE_THREADSAFE=2 -DSQLITE_ENABLE_COLUMN_METADATA -DSQLITE_ENABLE_FTS5
 
-LOCAL_LDLIBS := -nostdlib -ldl -llog -lm
+LOCAL_LDLIBS := -lstdc++ -ldl -llog -lm
 # if armeabi
 # LOCAL_LDLIBS := -nostdlib -ldl -llog -latomic
 LOCAL_STATIC_LIBRARIES := sqlite3

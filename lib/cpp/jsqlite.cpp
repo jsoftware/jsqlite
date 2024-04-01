@@ -1,7 +1,8 @@
 /* jsqlite.cpp  */
 /* jsqlite version defined in sqlite3_extversion */
 
-#ifdef ANDROID
+// #ifdef ANDROID
+#if 0
 extern "C" {
   extern void *__dso_handle __attribute__((__visibility__("hidden")));
   void *__dso_handle;
