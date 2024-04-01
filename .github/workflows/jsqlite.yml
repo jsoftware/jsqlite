@@ -497,7 +497,7 @@ jobs:
  webhook:
   name: Run Webhook
   runs-on: ubuntu-22.04
-  needs: [jsqlitelinux, jsqlitemacos, jsqliterpi64, jsqliterpi32, jsqlitewin, jsqlitefreebsd2, jsqliteopenbsd2]
+  needs: [jsqlitelinux, jsqlitemacos, jsqliterpi64, jsqliterpi32, jsqlitewin, jsqlitefreebsd2, jsqliteopenbsd2, jsqliteandroid]
   steps:
    - name: update server
      uses: distributhor/workflow-webhook@v2

@@ -65,15 +65,16 @@ fi
 echo "MAKEFLAGS=$MAKEFLAGS"
 
 if [ "$1" = "android" ]; then
-cd android/jni
+cd lib/android/jni
 ln -s -f ../.. src
 cd ../..
 rm -f androidlibs.zip
 # build binary for armeabi-v7a x86 x86_64 arm64-v8a
 cd android
 ndk-build
-zip -r ../androidlibs.zip libs
-cd ..
+zip -r ../../androidlibs.zip libs
+cd ../..
+ls -l
 exit 0
 fi
 
