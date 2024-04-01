@@ -26,7 +26,7 @@ endif
 
 LOCAL_SRC_FILES:= colblob.cpp colfloat.cpp colint.cpp coltext.cpp column.cpp exec.cpp jsqlite.cpp parm.cpp util.cpp
 
-LOCAL_CFLAGS += -DSQLITE_THREADSAFE=0 -DSQLITE_OMIT_LOAD_EXTENSION -DSQLITE_ENABLE_COLUMN_METADATA -DSQLITE_ENABLE_FTS5
+LOCAL_CFLAGS += -DSQLITE_THREADSAFE=2 -DSQLITE_ENABLE_COLUMN_METADATA -DSQLITE_ENABLE_FTS5
 
 LOCAL_LDLIBS := -nostdlib -ldl -llog -lm
 # if armeabi
