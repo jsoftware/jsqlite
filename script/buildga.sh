@@ -83,7 +83,7 @@ if [ "$1" = "wasm" ]; then
 cd lib
 USE_WASM=1 CC=emcc AR=emar ./makesq-wasm.sh
 cd ..
-cp bin/$1/j32/* j32
+cp lib/cpp/libjsqlite3.so j32
 find j32 -type d -exec chmod 755 {} \;
 find j32 -type f -exec chmod 644 {} \;
 ls -l j32
