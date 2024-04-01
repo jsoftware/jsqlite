@@ -2,7 +2,7 @@
 #
 # build linux/macOS on github actions
 #
-# argument is linux|darwin|raspberry|android|openbsd|freebsd|wasm|win
+# argument is linux|darwin|raspberry|android|openbsd|freebsd|wasm|win|win32
 # wasm is experimental
 
 set -vex
@@ -28,14 +28,16 @@ elif [ "$1" = "wasm" ]; then
   ext=""
 elif [ "$1" = "win" ]; then
   ext="dll"
+elif [ "$1" = "win32" ]; then
+  ext="dll"
 else
-  echo "argument is linux|darwin|raspberry|android|openbsd|freebsd|wasm|win"
+  echo "argument is linux|darwin|raspberry|android|openbsd|freebsd|wasm|win|win32"
   exit 1
 fi
 uname -a
 uname -m
 if [ "`uname -m`" != "armv6l" ] && [ "`uname -m`" != "i386" ] && [ "`uname -m`" != "i686" ] ; then
-if [ "$1" = "wasm" ]; then
+if [ "$1" = "wasm" ] || [ "$1" = "win32" ]; then
  m64=0
 else
  m64=1
@@ -74,7 +76,6 @@ cd android
 ndk-build
 zip -r ../../androidlibs.zip libs
 cd ../..
-ls -l
 exit 0
 fi
 
@@ -97,6 +98,17 @@ cd ../cpp
 cd ../..
 cp lib/cpp/libjsqlite3.dll j64
 ls -l j64
+exit 0
+fi
+
+if [ "$1" = "win32" ]; then
+cd lib/c
+./makewin32.sh
+cd ../cpp
+./makewin32.sh
+cd ../..
+cp lib/cpp/libjsqlite3_32.dll j32
+ls -l j32
 exit 0
 fi
 

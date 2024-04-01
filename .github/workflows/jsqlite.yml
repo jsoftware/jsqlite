@@ -434,7 +434,6 @@ jobs:
 # wasm -----------------------------------------------------------------
  jsqlitewasm:
   name: JSQLITE (wasm)
-  if: ${{ false }}
   runs-on: ubuntu-22.04
   steps:
    - name: Checkout Git repository
@@ -494,10 +493,44 @@ jobs:
       allowUpdates: true
       replacesArtifacts: true
 
+# windows --------------------------------------------------------------
+ jsqlitewin32:
+  name: JSQLITE (Windows 32)
+  runs-on: ubuntu-20.04
+  steps:
+   - name: Checkout Git repository
+     uses: actions/checkout@v3
+
+   - name: Setup Environment (Windows 32)
+     run: script/install-lnx.sh
+
+   - name: Commit
+     run: script/commit.sh ${{ github.sha }} ${{ github.actor }}
+
+   - name: Build JSQLITE (Windows 32)
+     env:
+      CC: clang
+     run: |
+      script/buildga.sh win32 || exit 1
+
+   - name: Compress Files (Windows 32)
+     run: |
+      ls -l j32
+      zip -r w32.zip j32
+
+   - name: Release JSQLITE (Windows 32)
+     uses: ncipollo/release-action@v1
+     with:
+      tag: build
+      artifacts: "w32.zip"
+      token: ${{ secrets.GITHUB_TOKEN }}
+      allowUpdates: true
+      replacesArtifacts: true
+
  webhook:
   name: Run Webhook
   runs-on: ubuntu-22.04
-  needs: [jsqlitelinux, jsqlitemacos, jsqliterpi64, jsqliterpi32, jsqlitewin, jsqlitefreebsd2, jsqliteopenbsd2, jsqliteandroid]
+  needs: [jsqlitelinux, jsqlitemacos, jsqliterpi64, jsqliterpi32, jsqlitewin, jsqlitewin32, jsqlitefreebsd2, jsqliteopenbsd2, jsqliteandroid, jsqlitewasm]
   steps:
    - name: update server
      uses: distributhor/workflow-webhook@v2
