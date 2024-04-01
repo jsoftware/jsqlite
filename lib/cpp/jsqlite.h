@@ -40,6 +40,7 @@ extern "C" {
   int sqlite3_free_values(void **);
   int sqlite3_read_values(void **, const char *, void **);
   int sqlite3_select_values(void **, const char *, void **, int, int*, int*, char*);
+  int sqlite3_load_extension(sqlite3*, const char *, const char *, char**);
   int readvalues(sqlite3_stmt *, void **);
 }
 
