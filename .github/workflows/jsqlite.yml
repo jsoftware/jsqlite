@@ -53,7 +53,7 @@ jobs:
 # macOS ----------------------------------------------------------------
  jsqlitemacos:
   name: JSQLITE (macOS)
-  runs-on: macos-12
+  runs-on: macos-13
   steps:
    - name: Checkout Git repository
      uses: actions/checkout@v3
@@ -170,7 +170,7 @@ jobs:
  jsqliteopenbsd:
   name: JSQLITE (OpenBSD vmactions)
   if: ${{ false }}
-  runs-on: macos-12
+  runs-on: macos-13
   steps:
    - name: Checkout Git repository
      uses: actions/checkout@v3
@@ -217,7 +217,7 @@ jobs:
 # openbsd --------------------------------------------------------------
  jsqliteopenbsd2:
   name: JSQLITE (OpenBSD cross-platform-actions)
-  runs-on: macos-12
+  runs-on: macos-13
   steps:
    - name: Checkout Git repository
      uses: actions/checkout@v3
@@ -314,7 +314,7 @@ jobs:
  jsqlitefreebsd:
   name: JSQLITE (FreeBSD vmactions)
   if: ${{ false }}
-  runs-on: macos-12
+  runs-on: macos-13
   steps:
    - name: Checkout Git repository
      uses: actions/checkout@v3
@@ -410,7 +410,7 @@ jobs:
 # android --------------------------------------------------------------
  jsqliteandroid:
   name: JSQLITE (android)
-  runs-on: macos-12
+  runs-on: macos-13
   steps:
    - name: Checkout Git repository
      uses: actions/checkout@v3
