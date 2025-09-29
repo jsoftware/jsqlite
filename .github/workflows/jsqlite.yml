@@ -17,7 +17,7 @@ jobs:
 # linux ----------------------------------------------------------------
  jsqlitelinux:
   name: JSQLITE (Linux)
-  runs-on: ubuntu-20.04
+  runs-on: ubuntu-22.04
   steps:
    - name: Checkout Git repository
      uses: actions/checkout@v3
@@ -53,7 +53,7 @@ jobs:
 # macOS ----------------------------------------------------------------
  jsqlitemacos:
   name: JSQLITE (macOS)
-  runs-on: macos-13
+  runs-on: macos-15-intel
   steps:
    - name: Checkout Git repository
      uses: actions/checkout@v3
@@ -80,10 +80,79 @@ jobs:
       allowUpdates: true
       replacesArtifacts: true
 
+# rpiarm64 ------------------------------------------------------------
+ jsqliterpiarm64:
+  name: JSQLITE (Linux arm64)
+  runs-on: ubuntu-22.04-arm
+  steps:
+   - name: Checkout Git repository
+     uses: actions/checkout@v3
+
+   - name: Setup Environment (Linux arm64)
+     run: script/install-rpi.sh
+
+   - name: Commit
+     run: script/commit.sh ${{ github.sha }} ${{ github.actor }}
+
+   - name: Build JSQLITE (Linux arm64)
+     env:
+      CC: clang
+     run: |
+      script/buildga.sh raspberry arm64 || exit 1
+
+   - name: Compress Files (Linux arm64)
+     run: |
+      ls -l j64
+      zip -r rpi64.zip j64
+
+   - name: Release JSQLITE (Linux arm64)
+     uses: ncipollo/release-action@v1
+     with:
+      tag: build
+      artifacts: "build.txt,rpi64.zip"
+      token: ${{ secrets.GITHUB_TOKEN }}
+      allowUpdates: true
+      replacesArtifacts: true
+
+# rpiarm32 ------------------------------------------------------------
+ jsqliterpiarm32:
+  name: JSQLITE (Linux arm32)
+  runs-on: ubuntu-22.04-arm
+  steps:
+   - name: Checkout Git repository
+     uses: actions/checkout@v3
+
+   - name: Setup Environment (Linux arm32)
+     run: script/install-rpi.sh
+
+   - name: Commit
+     run: script/commit.sh ${{ github.sha }} ${{ github.actor }}
+
+   - name: Build JSQLITE (Linux arm32)
+     env:
+      CC: arm-linux-gnueabihf-gcc
+     run: |
+      script/buildga.sh raspberry armv6l || exit 1
+
+   - name: Compress Files (Linux arm32)
+     run: |
+      ls -l j32
+      zip -r rpi32.zip j32
+
+   - name: Release JSQLITE (Linux arm32)
+     uses: ncipollo/release-action@v1
+     with:
+      tag: build
+      artifacts: "build.txt,rpi32.zip"
+      token: ${{ secrets.GITHUB_TOKEN }}
+      allowUpdates: true
+      replacesArtifacts: true
+
 # rpi64 ----------------------------------------------------------------
  jsqliterpi64:
   name: JSQLITE (Raspberry)
-  runs-on: ubuntu-20.04
+  if: ${{ false }}
+  runs-on: ubuntu-22.04
   steps:
    - name: Checkout Git repository
      uses: actions/checkout@v3
@@ -125,7 +194,8 @@ jobs:
 # rpi32 ----------------------------------------------------------------
  jsqliterpi32:
   name: JSQLITE (Raspberry32)
-  runs-on: ubuntu-20.04
+  if: ${{ false }}
+  runs-on: ubuntu-22.04
   steps:
    - name: Checkout Git repository
      uses: actions/checkout@v3
@@ -170,7 +240,7 @@ jobs:
  jsqliteopenbsd:
   name: JSQLITE (OpenBSD vmactions)
   if: ${{ false }}
-  runs-on: macos-13
+  runs-on: macos-15-intel
   steps:
    - name: Checkout Git repository
      uses: actions/checkout@v3
@@ -217,7 +287,7 @@ jobs:
 # openbsd --------------------------------------------------------------
  jsqliteopenbsd2:
   name: JSQLITE (OpenBSD cross-platform-actions)
-  runs-on: macos-13
+  runs-on: macos-15-intel
   steps:
    - name: Checkout Git repository
      uses: actions/checkout@v3
@@ -314,7 +384,7 @@ jobs:
  jsqlitefreebsd:
   name: JSQLITE (FreeBSD vmactions)
   if: ${{ false }}
-  runs-on: macos-13
+  runs-on: macos-15-intel
   steps:
    - name: Checkout Git repository
      uses: actions/checkout@v3
@@ -410,7 +480,7 @@ jobs:
 # android --------------------------------------------------------------
  jsqliteandroid:
   name: JSQLITE (android)
-  runs-on: macos-13
+  runs-on: macos-15-intel
   steps:
    - name: Checkout Git repository
      uses: actions/checkout@v3
@@ -467,7 +537,7 @@ jobs:
 # windows --------------------------------------------------------------
  jsqlitewin:
   name: JSQLITE (Windows)
-  runs-on: ubuntu-20.04
+  runs-on: ubuntu-22.04
   steps:
    - name: Checkout Git repository
      uses: actions/checkout@v3
@@ -501,7 +571,7 @@ jobs:
 # windows --------------------------------------------------------------
  jsqlitewin32:
   name: JSQLITE (Windows 32)
-  runs-on: ubuntu-20.04
+  runs-on: ubuntu-22.04
   steps:
    - name: Checkout Git repository
      uses: actions/checkout@v3
@@ -535,7 +605,7 @@ jobs:
  webhook:
   name: Run Webhook
   runs-on: ubuntu-22.04
-  needs: [jsqlitelinux, jsqlitemacos, jsqliterpi64, jsqliterpi32, jsqlitewin, jsqlitewin32, jsqlitefreebsd2, jsqliteopenbsd2, jsqliteandroid, jsqlitewasm]
+  needs: [jsqlitelinux, jsqlitemacos, jsqliterpiarm64, jsqliterpiarm32, jsqlitewin, jsqlitewin32, jsqlitefreebsd2, jsqliteopenbsd2, jsqliteandroid, jsqlitewasm]
   steps:
    - name: update server
      uses: distributhor/workflow-webhook@v2
